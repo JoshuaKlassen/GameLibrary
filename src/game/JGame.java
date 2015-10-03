@@ -2,15 +2,17 @@ package game;
 
 import java.awt.Canvas;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.image.BufferStrategy;
 
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 /*
- * Copyright 2015
+ * Copyright notice
  * Do not distribute
  * Date: October 2, 2015
  * Author: Joshua Klassen
@@ -27,7 +29,19 @@ public abstract class JGame extends Canvas implements Runnable{
 	
 	private int preferredUpdatesPerSecond = 60;
 	
+	private int currentUpdatesPerSecond;
+	private int currentFramesPerSecond;
+	
 	private JFrame frame;
+	
+	private boolean isFullScreen = false;
+	
+	private float scaleWidth = 1.0f;
+	private float scaleHeight = 1.0f;
+	
+	private Thread gameThread;
+	
+	private BufferStrategy bufferStrategy;
 	
 	private GraphicsEnvironment graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
 	private GraphicsDevice graphicsDevice = graphicsEnvironment.getDefaultScreenDevice();
@@ -35,6 +49,73 @@ public abstract class JGame extends Canvas implements Runnable{
 	public JGame(int screenWidth, int screenHeight){
 		screen_width = screenWidth;
 		screen_height = screenHeight;
+	}
+	
+	public synchronized void start(){
+		if(frame == null) setJFrame(getDefaultJFrame());
+		running = true;
+		gameThread = new Thread(this, "Main thread");
+		gameThread.start();
+		frame.setVisible(true);
+	}
+	
+	public synchronized void stop(){
+		running = false;
+		frame.dispose();
+		System.exit(0);
+	}
+	
+	@Override
+	public void run() {
+		long lastTime = System.nanoTime();
+		long timer = System.currentTimeMillis();
+		final double ns = 1000000000.0 / preferredUpdatesPerSecond;
+		double delta = 0;
+		
+		int updates = 0;
+		int frames  = 0;
+		
+		while(running){
+			long now = System.nanoTime();
+			delta += (now - lastTime) / ns;
+			lastTime = now;
+			
+			while(delta >= 1){
+				update();
+				updates ++;
+				delta --;
+			}
+			
+			renderScreen();
+			frames ++;
+			
+			if(System.currentTimeMillis() - timer > 1000){
+				timer += 1000;
+				currentUpdatesPerSecond = updates;
+				currentFramesPerSecond = frames;
+				updates = 0;
+				frames = 0;
+			}
+			
+		}
+	}
+	
+	private void renderScreen(){
+		bufferStrategy = getBufferStrategy();
+		if(bufferStrategy == null){
+			createBufferStrategy(2);
+			return;
+		}
+		
+		Graphics g = bufferStrategy.getDrawGraphics();
+		
+		((Graphics2D)g).scale(scaleWidth, scaleHeight);
+		
+		render(g);
+		
+		g.dispose();
+		bufferStrategy.show();
+		
 	}
 	
 	public JFrame getDefaultJFrame(){
@@ -69,10 +150,6 @@ public abstract class JGame extends Canvas implements Runnable{
 		//TODO
 	}
 	
-	@Override
-	public void run() {
-		//TODO
-	}
 	
 	public void render(Graphics g){
 		//TODO
@@ -80,6 +157,29 @@ public abstract class JGame extends Canvas implements Runnable{
 	
 	public void update(){
 		//TODO
+	}
+	
+	public void toggleFullScreen(){
+		frame.setVisible(false);
+		if(!isFullScreen && graphicsDevice.isFullScreenSupported()){
+			isFullScreen = true;
+			fullScreenMode();
+		}
+		else {
+			isFullScreen = false;
+			windowMode();
+		}
+		
+		scaleWidth = (frame.getWidth() / screen_width);
+		scaleHeight = (frame.getHeight() / screen_height);
+	}
+	
+	private void fullScreenMode(){
+		
+	}
+	
+	private void windowMode(){
+		
 	}
 	
 	public int getScreenWidth() { return screen_width; }
@@ -91,5 +191,21 @@ public abstract class JGame extends Canvas implements Runnable{
 	public void setScreenHeight(int screenHeight) { screen_height = screenHeight; }
 	
 	public void setPerferredUpdatesPerSecond(int updates) { preferredUpdatesPerSecond = updates; }
+
+	public int getCurrentUpdatesPerSecond() { return currentUpdatesPerSecond; }
+
+	public void setCurrentUpdatesPerSecond(int updates) { this.currentUpdatesPerSecond = updates; }
+
+	public int getCurrentFramesPerSecond() { return currentFramesPerSecond; }
+
+	public void setCurrentFramesPerSecond(int frames) { this.currentFramesPerSecond = frames; }
+	
+	public float getScaleWidth() { return scaleWidth; }
+	
+	public void setScaleWidth(float scale) { scaleWidth = scale; }
+	
+	public float getScaleHeight() { return scaleHeight; }
+	
+	public void setScaleHeight(float scale) { scaleHeight = scale; } 
 	
 }
