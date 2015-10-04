@@ -18,6 +18,7 @@ import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import jgame.input.InputHandler;
 import jgame.util.Utility;
 import jgame.util.Utility.OS;
 
@@ -49,6 +50,8 @@ public abstract class JGame extends Canvas implements Runnable{
 	//the current frames and updates per second
 	private int currentUpdatesPerSecond;
 	private int currentFramesPerSecond;
+	
+	private static InputHandler inputHandler = new InputHandler();
 	
 	//the screen
 	private JFrame frame;
@@ -87,7 +90,6 @@ public abstract class JGame extends Canvas implements Runnable{
 	public JGame(int screenWidth, int screenHeight){
 		screen_width = screenWidth;
 		screen_height = screenHeight;
-		this.setBackground(Color.black);
 	}
 	
 	/**
@@ -162,6 +164,9 @@ public abstract class JGame extends Canvas implements Runnable{
 		
 		Graphics g = bufferStrategy.getDrawGraphics();
 		
+		g.setColor(Color.black);
+		g.fillRect(0, 0, getWidth(), getHeight());
+		
 		((Graphics2D)g).scale(scaleWidth, scaleHeight);
 		
 		render(g);
@@ -179,6 +184,8 @@ public abstract class JGame extends Canvas implements Runnable{
 		bufferStrategy.show();
 		
 	}
+	
+	int x = 0;
 	
 	/**
 	 * The render method.
@@ -273,8 +280,22 @@ public abstract class JGame extends Canvas implements Runnable{
 		setJFrame(getDefaultJFrame());
 	}
 	
-	//TODO
-	private void initInput(){ }
+	/**
+	 * Initializes the input handler.
+	 */
+	private void initInput(){ 
+		this.addKeyListener(inputHandler);
+		this.addMouseListener(inputHandler);
+		this.addMouseMotionListener(inputHandler);
+		this.addMouseWheelListener(inputHandler);
+		this.requestFocus();
+	}
+	
+	/**
+	 * Returns the JGames InputHandler object
+	 * @return InputHandler
+	 */
+	public InputHandler getInputHandler(){ return inputHandler; }
 	
 	/**
 	 * Generates a JFrame.
@@ -317,6 +338,12 @@ public abstract class JGame extends Canvas implements Runnable{
 	 * @return frame
 	 */
 	public JFrame getFrame(){ return frame; }
+	
+	/**
+	 * Returns true if the screen is in full screen mode, returns false otherwise.
+	 * @return is the screen in full screen mode
+	 */
+	public boolean isFullScreen() { return isFullScreen; }
 	
 	/**
 	 * Sets the proffered updates per second for the game.
