@@ -51,6 +51,7 @@ public abstract class JGame extends Canvas implements Runnable{
 	private int currentUpdatesPerSecond;
 	private int currentFramesPerSecond;
 	
+	//the input handler
 	private static InputHandler inputHandler = new InputHandler();
 	
 	//the screen
@@ -184,8 +185,6 @@ public abstract class JGame extends Canvas implements Runnable{
 		bufferStrategy.show();
 		
 	}
-	
-	int x = 0;
 	
 	/**
 	 * The render method.

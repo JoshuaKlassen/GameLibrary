@@ -6,7 +6,7 @@ import java.awt.event.KeyEvent;
  * The INPUT_KEY enum.
  * <br/>Contains every keyboard button and mouse button on a standard machine.
  * <br/>Is used in {@link InputKey}s and an {@link InputHandler} to handle input.
- * @author joshklassen
+ * @author Joshua Klassen
  */
 public enum INPUT_KEY {
 	LEFT_CLICK(1),

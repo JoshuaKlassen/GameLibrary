@@ -16,7 +16,7 @@ import java.util.ArrayList;
  * <br/>@see {@link #InputKey(boolean, INPUT_KEY...)} for more details on the fire mode.
  * @author Joshua Klassen
  */
-public class InputKey {
+public final class InputKey {
 
 	//The array list of INPUT_KEYs
 	private ArrayList<INPUT_KEY> inputKeys;

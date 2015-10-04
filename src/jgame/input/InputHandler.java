@@ -28,7 +28,7 @@ import jgame.util.Vector2I;
  * <br/>To know the mouse wheel rotation, use {@link #getMouseWheelRotation()}. 
  * @author Joshua Klassen
  */
-public final class InputHandler extends KeyAdapter implements MouseListener, MouseMotionListener, MouseWheelListener {
+public class InputHandler extends KeyAdapter implements MouseListener, MouseMotionListener, MouseWheelListener {
 
 	//The input keys
 	private static ArrayList<InputKey> inputKeys = new ArrayList<InputKey>();

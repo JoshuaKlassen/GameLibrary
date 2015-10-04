@@ -2,12 +2,13 @@ package tests;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.util.ArrayList;
 
 import jgame.game.JGame;
 import jgame.input.INPUT_KEY;
 import jgame.input.InputHandler;
 import jgame.input.InputKey;
+import jgame.util.Vector2F;
+import jgame.util.Vector2I;
 
 public class JGameTest extends JGame {
 
@@ -26,20 +27,22 @@ public class JGameTest extends JGame {
 		System.out.println(super.screenshot());
 		super.getInputHandler().addInputKey(testKey);
 		System.out.println(super.getInputHandler());
+		
 	}
 	
 	public void render(Graphics g){
 		g.setColor(Color.white);
-		g.drawString(x + ":" + testKey.timesFired() + ":" + this.getInputHandler().getMouseWheelRotation(), 10, 30);
+		g.drawString(getCurrentFramesPerSecond() + ":" + getCurrentUpdatesPerSecond(), 10, 30);
 		g.setColor(Color.green);
 		g.fillRect(x, 10, 10, 10);
-		g.fillRect(getInputHandler().getMousePosition().x, getInputHandler().getMousePosition().y, 10, 10);
+		g.fillRect((int)(getInputHandler().getMousePosition().x / getScaleWidth()), (int)(getInputHandler().getMousePosition().y / getScaleHeight()), 10, 10);
 	}
 	
 	@Override
 	public void update(){
 		x += this.getInputHandler().getMouseWheelRotation();
 		getInputHandler().resetMouseWheelRotation();
+		if(testKey.isPressed()) toggleFullScreen();
 	}
 	
 	public static void main(String[] args){

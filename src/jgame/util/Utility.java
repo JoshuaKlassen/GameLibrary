@@ -1,6 +1,6 @@
 package jgame.util;
 
-public class Utility {
+public final class Utility {
 
 	public enum OS {
 		WINDOWS,
