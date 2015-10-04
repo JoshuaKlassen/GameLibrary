@@ -2,28 +2,33 @@ package jgame.util;
 
 public class Utility {
 
-	//TODO Design this better so users can see
 	public enum OS {
 		WINDOWS,
 		MAC,
 		LINUX,
-		OTHER ("?.?.?.?", "Unkown OS");
+		OTHER ("?.?.?.?");
 		
 		OS(){
 			version = System.getProperty("os.version");
-			name = System.getProperty("os.name");
 		}
 		
-		OS(String ver, String name){
+		OS(String ver){
 			version = ver;
-			this.name = name;
 		}
 		private String version;
-		private String name;
-		public String toString() { return "OS: " + name + " (" + version + ")"; }	
+		
+		/**
+		 * Returns a string representation of the operating system
+		 * @return string representation of the operating system (name & version)
+		 */
+		public String toString() { return this.name() + " (" + version + ")"; }	
 	}
 
-	
+	/**
+	 * Returns the name and version of the 
+	 * <br/>operating system as a OS enumeration.
+	 * @return the corresponding OS enumeration
+	 */
 	public static OS getOperatingSystem(){		
 		OS result = null;
 		String os = System.getProperty("os.name").toLowerCase();

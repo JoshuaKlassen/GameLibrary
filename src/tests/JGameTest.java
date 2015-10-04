@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import jgame.game.JGame;
-import jgame.util.Utility;
 
 public class JGameTest extends JGame {
 
@@ -13,6 +12,8 @@ public class JGameTest extends JGame {
 	public JGameTest(int screenWidth, int screenHeight) {
 		super(screenWidth, screenHeight);
 		super.setJFrame(getDefaultJFrame());
+		super.toggleFullScreen();
+		System.out.println(super.screenshot());
 	}
 	
 	@Override
@@ -22,9 +23,14 @@ public class JGameTest extends JGame {
 	}
 	
 	public static void main(String[] args){
-		JGameTest test = new JGameTest(100, 100);
+		long now = System.currentTimeMillis();
+		JGameTest test = new JGameTest(200, 100);
 		test.start();
-		System.out.println(Utility.getOperatingSystem());
+		
+		while(System.currentTimeMillis() - now < 2000){
+			
+		}
+		test.stop();
 	}
 
 }
