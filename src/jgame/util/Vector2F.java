@@ -9,7 +9,7 @@ import java.util.Random;
  * <br/>Represents a vector with the coordinates as floats.
  * <br/>
  * <br/>Since it's coordinates are floats, this class should be used to represent objects that need more precision,
- * <br/>such as velocity and acceleration,
+ * such as velocity and acceleration,
  * <br/>while {@link Vector2I} should be used to represent an object's position on the screen.
  * @author Joshua Klassen
  */

@@ -1,26 +1,25 @@
 package jgame.util;
 
 import java.awt.Point;
+import java.io.Serializable;
 import java.util.Random;
 
 /**
  * The Vector2I class.
- * <br/>A child of the {@link Vector2F} class.
  * <br/>Represents a vector with it's coordinates as integers.
  * <br/>
  * <br/>Since it's coordinates are whole numbers, this class should be used to represent
  * <br/>an objects position on the screen,
  * <br/>while the {@link Vector2F} class should be used to represent objects that won't be drawn to the screen.
  * @author Joshua Klassen
- *
  */
-public class Vector2I extends Vector2F{
+public class Vector2I implements Serializable{
 	//auto generated
 	private static final long serialVersionUID = 5619112057608236102L;
 
 	//the coordinates
-	public int x = (int)this.x;
-	public int y = (int)this.y;
+	public int x;
+	public int y;
 	
 	/**
 	 * Initializes the vector with the coordinates (0, 0).
@@ -123,7 +122,7 @@ public class Vector2I extends Vector2F{
 	 * @param a vector.
 	 * @return the length of a vector.
 	 */
-	public static double length(Vector2F a){
+	public static double length(Vector2I a){
 		return Math.sqrt(a.x * a.x + a.y * a.y);
 	}
 	
