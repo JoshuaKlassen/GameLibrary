@@ -3,6 +3,7 @@ package tests;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import jgame.UI.UIComponent;
 import jgame.UI.UILabel;
 import jgame.UI.UIPanel;
 import jgame.UI.UIProgressBar;
@@ -10,7 +11,6 @@ import jgame.game.JGame;
 import jgame.input.INPUT_KEY;
 import jgame.input.InputHandler;
 import jgame.input.InputKey;
-import jgame.util.Vector2F;
 import jgame.util.Vector2I;
 
 public class JGameTest extends JGame {
@@ -45,6 +45,7 @@ public class JGameTest extends JGame {
 		
 		panel.add(progressbar);
 		progressbar.setProgress(0.5);
+		
 	}
 	
 	public void render(Graphics g){

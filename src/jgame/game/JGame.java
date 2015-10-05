@@ -291,7 +291,7 @@ public abstract class JGame extends Canvas implements Runnable{
 	}
 	
 	/**
-	 * Returns the JGames InputHandler object
+	 * Returns the JGames InputHandler object.
 	 * @return InputHandler
 	 */
 	public InputHandler getInputHandler(){ return inputHandler; }
@@ -345,7 +345,7 @@ public abstract class JGame extends Canvas implements Runnable{
 	public boolean isFullScreen() { return isFullScreen; }
 	
 	/**
-	 * Sets the proffered updates per second for the game.
+	 * Sets the preferred updates per second for the game.
 	 * <br/>Will have no effect if {@link #start() start} has been called.
 	 * @param updatesPerSecond
 	 */
@@ -396,7 +396,7 @@ public abstract class JGame extends Canvas implements Runnable{
 	/**
 	 * Takes a screen shot of the game and saves it.
 	 * <br/>Can specify the location for the screen shot by calling
-	 * <br/> {@link #setScreenshotSaveLocation(String) setScreenshotSaveLocation}
+	 * <br/> {@link #setScreenshotSaveLocation(String) setScreenshotSaveLocation}.
 	 * @return screen shot name
 	 */
 	public String screenshot(){ 

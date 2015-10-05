@@ -7,10 +7,20 @@ import jgame.util.Vector2I;
 
 import org.w3c.dom.ranges.RangeException;
 
+/**
+ * The UIProgressBar class.
+ * <br/>
+ * <br/>A prebuilt {@link UIComponent}.
+ * <br/>Acts as a progress bar.
+ * @author joshklassen
+ *
+ */
 public class UIProgressBar extends UIComponent {
 
+	//the progress
 	private double progress = 0;
 	
+	//the colors
 	private Color outlineColor = Color.black;
 	private Color progressColor = Color.green;
 	private Color backgroundColor = Color.gray;
