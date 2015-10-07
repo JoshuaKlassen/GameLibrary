@@ -123,4 +123,13 @@ public abstract class UIComponent {
 		else show();
 	}
 	
+	/**
+	 * Returns a {@link String} representation of the UIComponent.
+	 * @return a string representation of the object.
+	 */
+	public String toString(){
+		return this.getClass().getSimpleName() + " [position=" + position + ", width=" + 
+				width + ", height=" + height + ", show=" + show + "]";
+	}
+	
 }

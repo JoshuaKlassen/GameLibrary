@@ -46,6 +46,8 @@ public class JGameTest extends JGame {
 		panel.add(progressbar);
 		progressbar.setProgress(0.5);
 		
+		System.out.println(panel);
+		
 	}
 	
 	public void render(Graphics g){

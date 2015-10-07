@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import jgame.util.Vector2I;
 
+//TODO Make class static
 /**
  * The InputHandler class.
  * <br/>This class combines the keyboard and the mouse to be a central class to handle input.

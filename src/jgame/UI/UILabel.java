@@ -95,7 +95,6 @@ public class UILabel extends UIComponent{
 	 * <br/>Has no effect on the label as is,
 	 * <br/>but allows for customization of labels.
 	 */
-
 	@Override
 	public void update() {
 		
@@ -106,7 +105,6 @@ public class UILabel extends UIComponent{
 	 * <br/>Needs to be called manually.
 	 * <br/>Will have no effect the the label is hidden. See {@link #show()} for more details.
 	 */
-
 	@Override
 	public void render(Graphics g) {
 		if(show){
@@ -152,5 +150,16 @@ public class UILabel extends UIComponent{
 	 * @param color
 	 */
 	public void setColor(Color color){ this.color = color; }
+	
+	/**
+	 * Returns a {@link String} representation of the UILabel.
+	 * @return a string representation of the object.
+	 */
+	public String toString(){
+		String result = super.toString();
+		result = result.substring(0, result.length() - 1);
+		result += ", text=\"" + text + "\"]";
+		return result;
+	}
 	
 }

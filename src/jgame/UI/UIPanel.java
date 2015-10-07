@@ -134,4 +134,20 @@ public class UIPanel extends UIComponent{
 	 */
 	public Color getBackgroundColor(){ return backgroundColor; }
 	
+	/**
+	 * Returns a {@link String} representation of the UIPanel.
+	 * @return a string representation of the object.
+	 */
+	public String toString(){
+		String result = super.toString();
+		result = result.substring(0, result.length() - 1);
+		result += ", background color=[" + backgroundColor.getRed() + "," + backgroundColor.getGreen() + "," + backgroundColor.getBlue() + "]";
+		result += ", components: (";
+		for(int i = 0; i < components.size(); i ++){
+			result += components.get(i);
+			if(i < components.size() - 1) result += ", ";
+		}
+		return result + ")]";
+	}
+	
 }
