@@ -1,5 +1,9 @@
+//TODO Document
+
 /**
- * TODO Finish documenting
+ * The util package.
+ * <br/>
+ * <br/>Contains Utility objects.
  * @author Joshua Klassen
  */
 package jgame.util;

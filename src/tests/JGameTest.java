@@ -67,8 +67,7 @@ public class JGameTest extends JGame {
 		p += 0.01;
 		if(p > 1) p = 0;
 		
-		progressbar.setProgress(p);
-		
+		progressbar.setProgress(testKey.timesFired() * 0.1);
 	}
 	
 	public static void main(String[] args){

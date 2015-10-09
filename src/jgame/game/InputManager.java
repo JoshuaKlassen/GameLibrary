@@ -11,7 +11,6 @@ import java.util.ArrayList;
 
 import jgame.util.Vector2I;
 
-//TODO clean up & update documentation
 /**
  * The InputManager class.
  * <br/>This class combines the keyboard and the mouse to be a central class to handle input.

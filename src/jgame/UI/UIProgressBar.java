@@ -86,10 +86,12 @@ public class UIProgressBar extends UIComponent {
 	 * @param progress
 	 */
 	public void setProgress(double progress){ 
-		if(progress < 0 && progress > 100){
+		if(progress < 0 || progress > 1){
 			throw new RangeException(RangeException.BAD_BOUNDARYPOINTS_ERR, 
 					"Progress cannout be less than 0 or greater than 1 (progress=" + progress + ")");
-		}else this.progress = progress; 
+		}else{
+			this.progress = progress;
+		}
 	}
 	
 	/**

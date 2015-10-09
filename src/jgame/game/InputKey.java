@@ -13,10 +13,10 @@ import java.util.ArrayList;
  * <br/>
  * <br/>When pressed, the {@link InputHandler} containing the InputKey will be fired depending on the fire mode.
  * <br/>Use {@link #isPressed} to check if a InputKey is currently pressed.
- * <br/>@see {@link #InputKey(boolean, INPUT_KEY...)} for more details on the fire mode.
+ * <br/>See {@link #InputKey(boolean, INPUT_KEY...)} for more details on the fire mode.
  * @author Joshua Klassen
  */
-public final class InputKey {
+public class InputKey {
 
 	//The array list of INPUT_KEYs
 	private ArrayList<INPUT_KEY> inputKeys;
