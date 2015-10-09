@@ -18,7 +18,6 @@ import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import jgame.input.InputHandler;
 import jgame.util.Utility;
 import jgame.util.Utility.OS;
 
@@ -52,7 +51,7 @@ public abstract class JGame extends Canvas implements Runnable{
 	private int currentFramesPerSecond;
 	
 	//the input handler
-	private static InputHandler inputHandler = new InputHandler();
+	//private static InputHandler inputHandler = new InputHandler();
 	
 	//the screen
 	private JFrame frame;
@@ -192,7 +191,7 @@ public abstract class JGame extends Canvas implements Runnable{
 	 * @param g
 	 */
 	public void render(Graphics g){
-		//TODO
+		//TODO once States have been made
 	}
 	
 	/**
@@ -200,7 +199,7 @@ public abstract class JGame extends Canvas implements Runnable{
 	 * Handles all of the updates.
 	 */
 	public void update(){
-		//TODO
+		//TODO once States have been made
 	}
 	
 	/**
@@ -267,7 +266,7 @@ public abstract class JGame extends Canvas implements Runnable{
 	 * Puts the screen in full screen mode.
 	 */
 	private void fullScreenModeLinux(){
-		//TODO
+		//TODO handle full screen in Linux
 	}
 	
 	/**
@@ -283,18 +282,14 @@ public abstract class JGame extends Canvas implements Runnable{
 	 * Initializes the input handler.
 	 */
 	private void initInput(){ 
-		this.addKeyListener(inputHandler);
-		this.addMouseListener(inputHandler);
-		this.addMouseMotionListener(inputHandler);
-		this.addMouseWheelListener(inputHandler);
+		this.addKeyListener(InputHandler.getInstance());
+		this.addMouseListener(InputHandler.getInstance());
+		this.addMouseMotionListener(InputHandler.getInstance());
+		this.addMouseWheelListener(InputHandler.getInstance());
 		this.requestFocus();
 	}
 	
-	/**
-	 * Returns the JGames InputHandler object.
-	 * @return InputHandler
-	 */
-	public InputHandler getInputHandler(){ return inputHandler; }
+	protected void someMethod(){}
 	
 	/**
 	 * Generates a JFrame.
@@ -309,7 +304,7 @@ public abstract class JGame extends Canvas implements Runnable{
 		try{
 			UIManager.setLookAndFeel(UIManager.getLookAndFeel());
 		}catch(UnsupportedLookAndFeelException e){
-			//TODO
+			//TODO add error system
 		}
 		
 		result.setLocationRelativeTo(null);
@@ -413,7 +408,7 @@ public abstract class JGame extends Canvas implements Runnable{
 			screenshotLocation = System.getProperty("user.home");
 			if(os == OS.WINDOWS) screenshotLocation += "\\Desktop";
 			else if(os == OS.MAC) screenshotLocation += "/Desktop";
-			else if(os == OS.LINUX); //TODO
+			else if(os == OS.LINUX); //TODO find home directory on Linux
 		}
 		
 		File file = new File(screenshotLocation, screenshotName);

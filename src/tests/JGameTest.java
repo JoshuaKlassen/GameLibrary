@@ -3,14 +3,13 @@ package tests;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import jgame.UI.UIComponent;
 import jgame.UI.UILabel;
 import jgame.UI.UIPanel;
 import jgame.UI.UIProgressBar;
+import jgame.game.InputHandler;
 import jgame.game.JGame;
-import jgame.input.INPUT_KEY;
-import jgame.input.InputHandler;
-import jgame.input.InputKey;
+import jgame.game.INPUT_KEY;
+import jgame.game.InputKey;
 import jgame.util.Vector2I;
 
 public class JGameTest extends JGame {
@@ -31,8 +30,7 @@ public class JGameTest extends JGame {
 		super(screenWidth, screenHeight);
 		super.setJFrame(getDefaultJFrame());
 		//super.toggleFullScreen();
-		super.getInputHandler().addInputKey(testKey);
-		System.out.println(super.getInputHandler());
+		InputHandler.add(testKey);
 		panel.setBackgroundColor(Color.blue);
 		inner = new UIPanel(new Vector2I(10, 10), 20, 20);
 		inner.add(new UILabel(new Vector2I(20, 20), "Hello world!", Color.red));
@@ -56,15 +54,15 @@ public class JGameTest extends JGame {
 		g.drawString(getCurrentFramesPerSecond() + ":" + getCurrentUpdatesPerSecond(), 10, 30);
 		g.setColor(Color.green);
 		g.fillRect(x, 10, 10, 10);
-		g.fillRect((int)(getInputHandler().getMousePosition().x / getScaleWidth()), (int)(getInputHandler().getMousePosition().y / getScaleHeight()), 10, 10);
+		g.fillRect((int)(InputHandler.getMousePosition().x / getScaleWidth()), (int)(InputHandler.getMousePosition().y / getScaleHeight()), 10, 10);
 	}
 	
 	double p = 0;
 	
 	@Override
 	public void update(){
-		x += this.getInputHandler().getMouseWheelRotation();
-		getInputHandler().resetMouseWheelRotation();
+		x += InputHandler.getMouseWheelRotation();
+		InputHandler.resetMouseWheelRotation();
 		if(testKey.isPressed()) toggleFullScreen();
 		p += 0.01;
 		if(p > 1) p = 0;
