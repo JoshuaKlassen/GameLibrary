@@ -2,10 +2,13 @@ package jgame.game;
 
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -19,7 +22,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import jgame.util.Utility;
-import jgame.util.Utility.OS;
+import jgame.util.OS;
 
 //TODO Document
 
@@ -340,6 +343,21 @@ public abstract class JGame extends Canvas implements Runnable{
 	 * @return is the screen in full screen mode
 	 */
 	public boolean isFullScreen() { return isFullScreen; }
+	
+	/**
+	 * Hide the mouse cursor on the screen
+	 */
+	public void hideCursor(){
+		Cursor c = Toolkit.getDefaultToolkit().createCustomCursor(new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB), new Point(0, 0), "");
+		this.setCursor(c);
+	}
+	
+	/**
+	 * Show the mouse cursor on the screen
+	 */
+	public void showCursor(){
+		this.setCursor(Cursor.getDefaultCursor());
+	}
 	
 	/**
 	 * Sets the preferred updates per second for the game.

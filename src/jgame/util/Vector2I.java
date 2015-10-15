@@ -103,21 +103,6 @@ public class Vector2I implements Serializable{
 	}
 	
 	/**
-	 * Returns a randomly generated vector with coordinates in the given range.
-	 * @param minX (minimum x coordinate).
-	 * @param minY (minimum y coordinate).
-	 * @param maxX (maximum x coordinate).
-	 * @param maxY (maximum y coordinate).
-	 * @return A vector within the given range.
-	 */
-	public static Vector2I generateVector(int minX, int minY, int maxX, int maxY){
-		Random random = new Random();
-		int x = random.nextInt(maxX - minX) + maxX;
-		int y = random.nextInt(maxY - minY) + maxY;
-		return new Vector2I(x, y);
-	}
-	
-	/**
 	 * Returns the length of the given vector.
 	 * @param a vector.
 	 * @return the length of a vector.

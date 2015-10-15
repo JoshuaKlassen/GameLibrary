@@ -103,21 +103,6 @@ public class Vector2F implements Serializable{
 	}
 	
 	/**
-	 * Returns a randomly generated vector with coordinates in the given range.
-	 * @param minX (minimum x coordinate).
-	 * @param minY (minimum y coordinate).
-	 * @param maxX (maximum x coordinate).
-	 * @param maxY (maximum y coordinate).
-	 * @return A vector within the given range.
-	 */
-	public static Vector2F generateVector(float minX, float minY, float maxX, float maxY){
-		Random random = new Random();
-		float x = random.nextFloat() * (maxX - minX) + minX;
-		float y = random.nextFloat() * (maxY - minY) + minY;
-		return new Vector2F(x, y);
-	}
-	
-	/**
 	 * Returns the length of the given vector.
 	 * @param a vector.
 	 * @return the length of a vector.
