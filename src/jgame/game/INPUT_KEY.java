@@ -96,7 +96,7 @@ public enum INPUT_KEY {
 	private final int ID;
 	private boolean isPressed;
 	INPUT_KEY(int ID){ this.ID = ID; }
-	protected int getID(){ return ID; }
+	public int getID(){ return ID; }
 	protected void press() { isPressed = true; }
 	protected void release() { isPressed = false; }
 	protected boolean isPressed() { return isPressed; }

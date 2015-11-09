@@ -11,6 +11,7 @@ import jgame.game.INPUT_KEY;
 import jgame.game.InputHandler;
 import jgame.game.InputKey;
 import jgame.game.JGame;
+import jgame.util.JRobot;
 import jgame.util.Utility;
 import jgame.util.Vector2I;
 
@@ -19,6 +20,8 @@ public class JGameTest extends JGame {
 	private static final long serialVersionUID = 1L;
 
 	InputKey testKey = new InputKey(true, INPUT_KEY.VK_Y, INPUT_KEY.VK_U, INPUT_KEY.VK_T);
+	
+	InputKey escape = new InputKey(INPUT_KEY.VK_ESCAPE);
 	
 	int x = 0;
 	
@@ -40,7 +43,7 @@ public class JGameTest extends JGame {
 		super(screenWidth, screenHeight);
 		super.setJFrame(getDefaultJFrame());
 		//super.toggleFullScreen();
-		InputHandler.add(testKey);
+		InputHandler.add(testKey, escape);
 		panel.setBackgroundColor(Color.blue);
 		inner = new UIPanel(new Vector2I(10, 10), 20, 20);
 		inner.add(new UILabel(new Vector2I(20, 20), "Hello world!", Color.red));
@@ -69,13 +72,12 @@ public class JGameTest extends JGame {
 		}
 		
 		super.hideCursor();
-		
 	}
 	
 	public void render(Graphics g){
 		//panel.render(g);
 		g.setColor(Color.white);
-		g.drawString(getCurrentFramesPerSecond() + ":" + getCurrentUpdatesPerSecond(), 10, 30);
+		g.drawString(getCurrentFramesPerSecond() + ":" + getCurrentUpdatesPerSecond() + ":" + InputHandler.getMousePosition(), 10, 30);
 		g.setColor(Color.green);
 		g.fillRect(x, 10, 10, 10);
 		g.fillRect(rec2.x, rec2.y, rec2.width, rec2.height);
@@ -99,6 +101,7 @@ public class JGameTest extends JGame {
 		x += InputHandler.getMouseWheelRotation();
 		InputHandler.resetMouseWheelRotation();
 		if(testKey.isPressed()) toggleFullScreen();
+		if(escape.isPressed()) stop();
 		p += 0.01;
 		if(p > 1) p = 0;
 		
@@ -109,7 +112,6 @@ public class JGameTest extends JGame {
 		if(rec1.intersects(rec2)){
 			//System.out.println(Bitmask.collision(rec1,rec2, new Bitmask(bA), new Bitmask(bB)));
 		}
-		
 	}
 	
 	public static void main(String[] args){

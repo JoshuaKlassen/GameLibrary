@@ -2,7 +2,6 @@ package jgame.util;
 
 import java.awt.Point;
 import java.io.Serializable;
-import java.util.Random;
 
 /**
  * The Vector2F class.
