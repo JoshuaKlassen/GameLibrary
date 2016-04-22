@@ -3,7 +3,6 @@ package tests;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
-
 import jgame.UI.UILabel;
 import jgame.UI.UIPanel;
 import jgame.UI.UIProgressBar;
@@ -11,7 +10,6 @@ import jgame.game.INPUT_KEY;
 import jgame.game.InputHandler;
 import jgame.game.InputKey;
 import jgame.game.JGame;
-import jgame.util.JRobot;
 import jgame.util.Utility;
 import jgame.util.Vector2I;
 
@@ -24,8 +22,6 @@ public class JGameTest extends JGame {
 	InputKey escape = new InputKey(INPUT_KEY.VK_ESCAPE);
 	
 	int x = 0;
-	
-	InputHandler i;
 	
 	UIPanel panel = new UIPanel(new Vector2I(50, 50), 20, 50);
 	UIPanel inner;
@@ -43,8 +39,17 @@ public class JGameTest extends JGame {
 		super(screenWidth, screenHeight);
 		super.setJFrame(getDefaultJFrame());
 		//super.toggleFullScreen();
+		
+		String serial = "Serialized data";
+		
+		Utility.writeObject(serial, Utility.createDataFolder("objects") + "/test.dat");
+		
+		serial = (String)Utility.readObject(Utility.createDataFolder("objects") + "/test.dat");
+		
+		System.out.println(serial);
+		
 		InputHandler.add(testKey, escape);
-		panel.setBackgroundColor(Color.blue);
+		panel.setBackgroundColor(new Color(0x0000ff));
 		inner = new UIPanel(new Vector2I(10, 10), 20, 20);
 		inner.add(new UILabel(new Vector2I(20, 20), "Hello world!", Color.red));
 		inner.setBackgroundColor(Color.yellow);
@@ -75,7 +80,7 @@ public class JGameTest extends JGame {
 	}
 	
 	public void render(Graphics g){
-		//panel.render(g);
+		panel.render(g);
 		g.setColor(Color.white);
 		g.drawString(getCurrentFramesPerSecond() + ":" + getCurrentUpdatesPerSecond() + ":" + InputHandler.getMousePosition(), 10, 30);
 		g.setColor(Color.green);
@@ -86,7 +91,7 @@ public class JGameTest extends JGame {
 		
 		if(rec1.intersects(rec2)){
 			Vector2I result = Bitmask.firstPointOfContact(rec1,rec2, testMask, new Bitmask(bB));
-			g.drawString(result+"", 100, 30);
+			g.drawString(result+"", 130, 30);
 			if(result != null){
 				g.setColor(Color.blue);
 				g.fillRect(result.x, result.y, 1, 1);

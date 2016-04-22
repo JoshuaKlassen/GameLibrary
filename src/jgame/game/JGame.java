@@ -21,6 +21,7 @@ import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import jgame.util.JRobot;
 import jgame.util.Utility;
 import jgame.util.OS;
 
@@ -293,8 +294,6 @@ public abstract class JGame extends Canvas implements Runnable{
 		this.addMouseWheelListener(InputHandler.getInstance());
 		this.requestFocus();
 	}
-	
-	protected void someMethod(){}
 	
 	/**
 	 * Generates a JFrame.

@@ -28,7 +28,7 @@ public final class JRobot {
 	public static void press(INPUT_KEY key){
 		if(robot == null)
 			createRobot();
-		if(key == INPUT_KEY.LEFT_CLICK || key == INPUT_KEY.RIGHT_CLICK || key == INPUT_KEY.MOUSE_WHEEL)
+		if(key.getID() >= 1 && key.getID() <= 3)
 			robot.mousePress(key.getID());
 		else
 			robot.keyPress(key.getID());
@@ -37,7 +37,7 @@ public final class JRobot {
 	public static void release(INPUT_KEY key){
 		if(robot == null)
 			createRobot();
-		if(key == INPUT_KEY.LEFT_CLICK || key == INPUT_KEY.RIGHT_CLICK || key == INPUT_KEY.MOUSE_WHEEL)
+		if(key.getID() >= 1 && key.getID() <= 3)
 			robot.mousePress(key.getID());
 		else
 			robot.keyRelease(key.getID());

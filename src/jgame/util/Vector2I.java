@@ -2,6 +2,7 @@ package jgame.util;
 
 import java.awt.Point;
 import java.io.Serializable;
+import java.util.Random;
 
 /**
  * The Vector2I class.
@@ -108,6 +109,21 @@ public class Vector2I implements Serializable{
 	 */
 	public static double length(Vector2I a){
 		return Math.sqrt(a.x * a.x + a.y * a.y);
+	}
+	
+	/**
+	 * Returns a randomly generated vector with coordinates in the given range.
+	 * @param minX (minimum x coordinate).
+	 * @param minY (minimum y coordinate).
+	 * @param maxX (maximum x coordinate).
+	 * @param maxY (maximum y coordinate).
+	 * @return A vector within the given range.
+	 */
+	public static Vector2I generateVector(int minX, int minY, int maxX, int maxY){
+		Random random = new Random();
+		int x = random.nextInt(maxX - minX) + maxX;
+		int y = random.nextInt(maxY - minY) + maxY;
+		return new Vector2I(x, y);
 	}
 	
 	/**
