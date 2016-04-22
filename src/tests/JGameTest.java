@@ -17,7 +17,7 @@ public class JGameTest extends JGame {
 
 	private static final long serialVersionUID = 1L;
 
-	InputKey testKey = new InputKey(true, INPUT_KEY.VK_Y, INPUT_KEY.VK_U, INPUT_KEY.VK_T);
+	InputKey testKey = new InputKey(true, INPUT_KEY.VK_A);
 	
 	InputKey escape = new InputKey(INPUT_KEY.VK_ESCAPE);
 	
@@ -43,7 +43,7 @@ public class JGameTest extends JGame {
 		String serial = "Serialized data";
 		
 		Utility.writeObject(serial, Utility.createDataFolder("objects") + "/test.dat");
-		
+		System.out.println(Utility.createDataFolder("objects"));
 		serial = (String)Utility.readObject(Utility.createDataFolder("objects") + "/test.dat");
 		
 		System.out.println(serial);
@@ -105,7 +105,10 @@ public class JGameTest extends JGame {
 	public void update(){
 		x += InputHandler.getMouseWheelRotation();
 		InputHandler.resetMouseWheelRotation();
-		if(testKey.isPressed()) toggleFullScreen();
+		if(testKey.isPressed()) {
+			toggleFullScreen();
+			testKey.release();
+		}
 		if(escape.isPressed()) stop();
 		p += 0.01;
 		if(p > 1) p = 0;

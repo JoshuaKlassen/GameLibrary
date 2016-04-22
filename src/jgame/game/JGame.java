@@ -21,9 +21,8 @@ import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import jgame.util.JRobot;
-import jgame.util.Utility;
 import jgame.util.OS;
+import jgame.util.Utility;
 
 //TODO Document
 
@@ -226,6 +225,7 @@ public abstract class JGame extends Canvas implements Runnable{
 		scaleHeight = (frame.getHeight() / screen_height);
 		
 		frame.setVisible(true);
+		this.requestFocus();
 	}
 	
 	/**

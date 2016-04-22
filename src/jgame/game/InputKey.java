@@ -91,6 +91,12 @@ public class InputKey {
 		for(INPUT_KEY key: inputKeys) this.inputKeys.add(key);
 	}
 	
+	public void release(){
+		for(INPUT_KEY key: inputKeys){
+			key.release();
+		}
+	}
+	
 	/**
 	 * Returns an {@link ArrayList} of the {@link INPUT_KEY}s
 	 * <br/>in an {@link InputKey}.
