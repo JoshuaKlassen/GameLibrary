@@ -30,6 +30,8 @@ public final class InputHandler{
 
 	private static InputManager inputManager = new InputManager();
 	
+	private static JGame game;
+	
 	/**
 	 * Adds {@link InputKey}s for the InputHandler to listen for.
 	 * @param keys
@@ -56,6 +58,10 @@ public final class InputHandler{
 		return inputManager.getInputKeys();
 	}
 	
+	public static boolean hasKey(INPUT_KEY key){
+		return inputManager.getInputKeys().contains(key);
+	}
+	
 	/**
 	 * Returns the current rotation of the mouse wheel.
 	 * <br/>See: {@link MouseWheelEvent#getWheelRotation()} for more info.
@@ -79,6 +85,18 @@ public final class InputHandler{
 	 */
 	public static Vector2I getMousePosition(){
 		return inputManager.getMousePosition();
+	}
+	
+	public static Vector2I getScaledMousePosition(){
+		Vector2I result = null;
+		if(game != null){
+			result = game.getScaledMousePosition();
+		}
+		return result;
+	}
+	
+	protected static void init(JGame game){
+		InputHandler.game = game;
 	}
 	
 	/*

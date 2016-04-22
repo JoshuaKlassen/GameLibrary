@@ -22,7 +22,9 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import jgame.util.OS;
+import jgame.util.Time;
 import jgame.util.Utility;
+import jgame.util.Vector2I;
 
 //TODO Document
 
@@ -131,6 +133,8 @@ public abstract class JGame extends Canvas implements Runnable{
 		
 		int updates = 0;
 		int frames  = 0;
+		
+		Time.init();
 		
 		while(running){
 			long now = System.nanoTime();
@@ -288,11 +292,17 @@ public abstract class JGame extends Canvas implements Runnable{
 	 * Initializes the input handler.
 	 */
 	private void initInput(){ 
+		InputHandler.init(this);
 		this.addKeyListener(InputHandler.getInstance());
 		this.addMouseListener(InputHandler.getInstance());
 		this.addMouseMotionListener(InputHandler.getInstance());
 		this.addMouseWheelListener(InputHandler.getInstance());
 		this.requestFocus();
+	}
+	
+	public Vector2I getScaledMousePosition(){
+		Vector2I mousePosition = InputHandler.getMousePosition();
+		return new Vector2I((int)(mousePosition.x / scaleWidth), (int)(mousePosition.y / scaleHeight));
 	}
 	
 	/**

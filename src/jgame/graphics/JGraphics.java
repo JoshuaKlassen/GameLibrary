@@ -8,10 +8,10 @@ import java.awt.image.BufferedImage;
 
 public class JGraphics{
 
-	private static Graphics graphics;
+	private Graphics graphics;
 		
-	private JGraphics(){
-		
+	public JGraphics(Graphics graphics){
+		this.graphics = graphics;
 	}
 	
 	public void setColor(Color c){
@@ -99,9 +99,4 @@ public class JGraphics{
 		}
 		return true;
 	}
-	
-	public static Graphics getGraphics(){
-		return graphics;
-	}
-	
 }

@@ -123,6 +123,17 @@ public class InputKey {
 	 */
 	public void setOnceFire(boolean onceFire) { this.onceFire = onceFire; }
 	
+	public boolean equals(Object o){
+		boolean result = false;
+		
+		if(o instanceof InputKey){
+			InputKey ok = (InputKey)o;
+			result = ((InputKey) o).getKeys().equals(getKeys());
+		}
+		
+		return result;
+	}
+	
 	/**
 	 * Returns a string representation of an {@link InputKey},
 	 * <br/>in the form '{@link INPUT_KEY} name ({@link INPUT_KEY} isPressed), for all

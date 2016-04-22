@@ -91,7 +91,8 @@ public enum INPUT_KEY {
 	VK_ADD(KeyEvent.VK_ADD),
 	VK_CTRL(KeyEvent.VK_CONTROL),
 	VK_DELETE(KeyEvent.VK_DELETE),
-	VK_OTHER(KeyEvent.CHAR_UNDEFINED); //TODO maybe remove this
+	VK_OTHER(KeyEvent.CHAR_UNDEFINED), //TODO maybe remove this
+	NUMBER_OF_KEYS(-1);
 	
 	private final int ID;
 	private boolean isPressed;
