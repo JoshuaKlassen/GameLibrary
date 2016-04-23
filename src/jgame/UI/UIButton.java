@@ -5,16 +5,17 @@ import java.util.ArrayList;
 
 import jgame.game.InputHandler;
 import jgame.game.InputKey;
+import jgame.graphics.Drawable;
 import jgame.util.Vector2I;
 
 //TODO redesign
 //Not to happy with this :/
 public class UIButton extends UIComponent{
 
-	private UIComponent normalState;	//could be a text label or an image
-	private UIComponent highlightedState;
-	private UIComponent pressedState;
-	private UIComponent currentState;
+	private Drawable normalState;	//could be a text label or an image
+	private Drawable highlightedState;
+	private Drawable pressedState;
+	private Drawable currentState;
 	private ArrayList <InputKey> pressKeys;
 	
 	private ButtonAction action;
@@ -34,7 +35,7 @@ public class UIButton extends UIComponent{
 	}
 	
 	private void init(){
-		normalState = new UILabel(position, "Button");
+		normalState = null;
 		currentState = normalState;
 		pressKeys = new ArrayList<InputKey>();
 	}
@@ -49,15 +50,15 @@ public class UIButton extends UIComponent{
 		return pressKeys;
 	}
 	
-	public void setNormalState(UIComponent state){
+	public void setNormalState(Drawable state){
 		normalState = state;
 	}
 	
-	public void setHighlightedState(UIComponent state){
+	public void setHighlightedState(Drawable state){
 		highlightedState = state;
 	}
 	
-	public void setPressedState(UIComponent state){
+	public void setPressedState(Drawable state){
 		pressedState = state;
 	}
 	
@@ -85,10 +86,7 @@ public class UIButton extends UIComponent{
 		}
 		
 		if(mouseEnable && isPressed && !keyPressed){
-			if(action != null){
-				action.doAction();
-			}
-			isPressed = false;
+			release();
 		}
 		
 		if(highlighted && !isPressed && highlightedState != null){
@@ -102,7 +100,8 @@ public class UIButton extends UIComponent{
 
 	@Override
 	public void render(Graphics g) {
-		currentState.render(g);
+		if(currentState != null)
+			currentState.render(g);
 	}
 	
 	public boolean contains(Vector2I pos){
@@ -128,14 +127,29 @@ public class UIButton extends UIComponent{
 		}
 	}
 	
-	public void release(){
+	public void safeRelease(){
 		if(isPressed){
 			isPressed = false;
 		}
 	}
 	
+	public void release(){
+		if(action != null){
+			action.doAction();
+		}
+		safeRelease();
+	}
+	
 	public void trackMouse(boolean track){
 		mouseEnable = track;
+	}
+	
+	public boolean isHighlighted(){
+		return highlighted;
+	}
+	
+	public boolean isPressed(){
+		return isPressed;
 	}
 	
 }

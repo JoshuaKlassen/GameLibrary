@@ -1,170 +1,128 @@
 package tests;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Rectangle;
 
 import jgame.UI.ButtonAction;
 import jgame.UI.UIButton;
+import jgame.UI.UIButtonList;
 import jgame.UI.UILabel;
-import jgame.UI.UIPanel;
-import jgame.UI.UIProgressBar;
 import jgame.game.INPUT_KEY;
 import jgame.game.InputHandler;
 import jgame.game.InputKey;
 import jgame.game.JGame;
 import jgame.game.State;
 import jgame.graphics.Drawable;
-import jgame.util.Delay;
-import jgame.util.Utility;
 import jgame.util.Vector2I;
 
 public class MainMenuState extends State {
 
-	InputKey testKey = new InputKey(true, INPUT_KEY.VK_A);
+	private UILabel gameTitle;
+	private String[] menuTitles = {"Single player", "Multiplayer", "Training", "Options", "Quit"};
 	
-	InputKey space = new InputKey(true, INPUT_KEY.VK_SPACE);
+	private InputKey up = new InputKey(true, INPUT_KEY.UP);
+	private InputKey down = new InputKey(true, INPUT_KEY.DOWN);
+	private InputKey leftClick = new InputKey(INPUT_KEY.LEFT_CLICK);
 	
-	InputKey escape = new InputKey(INPUT_KEY.VK_ESCAPE);
+	private int BUTTON_WIDTH = 70;
+	private int BUTTON_HEIGHT = 40;
+	private int BUTTON_LIST_HEIGHT = 90;
 	
-	int x = 0;
+	private Color buttonBackground = Color.gray;
 	
-	UIPanel panel = new UIPanel(new Vector2I(20, 50), 20, 50);
-	UIPanel inner;
-	UIProgressBar progressbar;
-	UIButton button;
-	
-	Rectangle rec1 = new Rectangle(60, 60, 40, 40);
-	Rectangle rec2 = new Rectangle(10, 10, 10, 10);
-	
-	int[][] bA = new int[rec1.width][rec1.height];
-	int[][] bB = new int[rec2.width][rec2.height];
-	
-	Bitmask testMask = new Bitmask(Utility.loadImage("/BitmaskTest.png"));
-	
-	Delay delay = new Delay(1000);
-	
-	Drawable drawItem;
-	
-	double p = 0;
+	private UIButtonList menuButtons;
 	
 	public MainMenuState(JGame game) {
 		super(game);
-		String serial = "Serialized data";
-		InputHandler.add(new InputKey(INPUT_KEY.LEFT_CLICK));
-		InputHandler.add(new InputKey(INPUT_KEY.LEFT_CLICK));
-		Utility.writeObject(serial, Utility.createDataFolder("objects") + "/test.dat");
-		System.out.println(Utility.createDataFolder("objects"));
-		serial = (String)Utility.readObject(Utility.createDataFolder("objects") + "/test.dat");
 		
-		System.out.println(serial);
+		int centreScreen = (int)(getGame().getWidth()/2 / getGame().getScaleWidth());
 		
-		InputHandler.add(testKey, escape);
-		InputHandler.add(space);
-		panel.setBackgroundColor(new Color(0x0000ff));
-		inner = new UIPanel(new Vector2I(10, 10), 20, 20);
-		inner.add(new UILabel(new Vector2I(20, 20), "Hello world!", Color.red));
-		inner.setBackgroundColor(Color.yellow);
-		panel.add(inner);
-		panel.setWidth(300);
+		gameTitle = new UILabel(new Vector2I(centreScreen - 40, 70), "Sandbox", Color.RED);
 		
-		progressbar = new UIProgressBar(new Vector2I(10, 30), 100, 10);
-		panel.add(progressbar);
-		progressbar.setProgress(0.5);
+		InputHandler.add(up, down, leftClick);
+
+		menuButtons = new UIButtonList(new Vector2I(centreScreen - BUTTON_WIDTH/2 - 10, BUTTON_LIST_HEIGHT));
 		
-		button = new UIButton(new Vector2I(150, 10), 50, 50);
-		UIPanel temp = new UIPanel(button.getPosition(), 50, 50);
-		temp.setBackgroundColor(Color.red);
-		button.setHighlightedState(temp);
-		UIPanel temp2 = new UIPanel(button.getPosition(), 50, 50);
-		temp2.setBackgroundColor(Color.green);
-		button.setPressedState(temp2);
-		
-		ButtonAction ba = new ButtonAction(){
-			public void doAction(){
-				x++;
-			}
-		};
-		button.setAction(ba);
-		button.trackMouse(true);
-		button.addPressKeys(new InputKey(INPUT_KEY.LEFT_CLICK), new InputKey(INPUT_KEY.VK_SPACE));
-		
-		panel.add(button);
-		
-		System.out.println(panel);
-		
-		for(int i = 0; i < bA.length; i ++){
-			for(int j = 0; j < bA[0].length; j ++){
-				bA[i][j] = 1;
-			}
-		}
-		
-		for(int i = 0; i < bB.length; i ++){
-			for(int j = 0; j < bB[0].length; j ++){
-				bB[i][j] = 1;
-			}
-		}
-		
-		delay.start();
-		
-		drawItem = new Drawable(){
-			public void render(Graphics g){
-				g.setColor(Color.white);
-				g.drawString("Drawable item", 300, 150);
-			}
+		for(int i = 0; i < 5; i ++){
+			int height = BUTTON_LIST_HEIGHT + (i*15);
+			UIButton b = new UIButton(new Vector2I(centreScreen - BUTTON_WIDTH/2 - 10, height), BUTTON_WIDTH, BUTTON_HEIGHT/4);
+			UILabel name = new UILabel(b.getPosition().clone(), menuTitles[i]);
+			name.getPosition().x += 15;
+			name.setColor(Color.blue);
+			name.setFont(new Font(name.getFont().getFontName(), name.getFont().getStyle(), 9));
+			name.getPosition().y += 7;
+			Drawable normal = new Drawable(){
+				public void render(Graphics g){
+					g.setColor(buttonBackground);
+					g.fillRect(b.getPosition().x, b.getPosition().y, b.getWidth(), b.getHeight());
+					name.render(g);
+				}
+				public void update(){System.out.println("in my drawable");}
+			};
 			
-			public void update(){}
+			int highlightSize = 5;
+			Drawable highlighted = new Drawable(){
+				public void render(Graphics g){
+					g.setColor(buttonBackground);
+					g.fillRect(b.getPosition().x-highlightSize, b.getPosition().y-highlightSize, b.getWidth()+highlightSize*2, b.getHeight()+highlightSize*2);
+					name.render(g);
+				}
+				public void update(){System.out.println("in my drawable");}
+			};
+			
+			int pressedSize = 5;
+			Drawable pressed = new Drawable(){
+				public void render(Graphics g){
+					g.setColor(buttonBackground);
+					g.fillRect(b.getPosition().x+pressedSize, b.getPosition().y+pressedSize, b.getWidth()-pressedSize*2, b.getHeight()-pressedSize*2);
+					name.render(g);
+				}
+				public void update(){System.out.println("in my drawable");}
+			};
+			b.setNormalState(normal);
+			b.setHighlightedState(highlighted);
+			b.setPressedState(pressed);
+			b.addPressKeys(leftClick);
+			b.trackMouse(true);
+			menuButtons.addButton(b);
+		}
+		
+		//first button
+		UIButton startButton = menuButtons.getButtons().get(0);
+		ButtonAction singlePlayerAction = new ButtonAction(){
+			public void doAction(){
+				getGame().transitionState(new GameState(getGame()));
+			}
 		};
+		startButton.setAction(singlePlayerAction);
+		
+		//last button
+		UIButton exitButton = menuButtons.getButtons().get(menuButtons.getButtons().size()-1);
+		ButtonAction exitAction = new ButtonAction(){
+			public void doAction(){
+				getGame().stop();
+			}
+		};
+		exitButton.setAction(exitAction);
+		
+		
 	}
 
 	@Override
 	public void render(Graphics g) {
-		panel.render(g);
-		g.setColor(Color.white);
-		g.drawString(getGame().getCurrentFramesPerSecond() + ":" + getGame().getCurrentUpdatesPerSecond() + ":" + InputHandler.getMousePosition(), 10, 30);
-		g.setColor(Color.green);
-		g.fillRect(x, 10, 10, 10);
-		g.fillRect(rec2.x, rec2.y, rec2.width, rec2.height);
-		g.setColor(Color.white);
-		g.fillRect(rec1.x, rec1.y, rec1.width, rec1.height);
+		gameTitle.render(g);
 		
-		if(rec1.intersects(rec2)){
-			Vector2I result = Bitmask.firstPointOfContact(rec1,rec2, testMask, new Bitmask(bB));
-			g.drawString(result+"", 130, 30);
-			if(result != null){
-				g.setColor(Color.blue);
-				g.fillRect(result.x, result.y, 1, 1);
-			}
-		}
+		
+		menuButtons.render(g);
+		
 	}
 
 	@Override
 	public void update() {
-		x += InputHandler.getMouseWheelRotation();
-		InputHandler.resetMouseWheelRotation();
-		panel.update();
-		if(testKey.isPressed()) {
-			getGame().toggleFullScreen();
-			testKey.release();
-		}
+		gameTitle.update();
 		
-		if(delay.isOver()){
-			System.out.println("Delay is over!");
-			delay.reset();
-			delay.start();
-			panel.setPosition(new Vector2I(panel.getPosition().x + 1, panel.getPosition().y));
-		}
-		
-		if(escape.isPressed()) getGame().stop();
-		p += 0.02;
-		
-		progressbar.setProgress(p%1);
-		
-		rec2.setLocation((int)(InputHandler.getMousePosition().x / getGame().getScaleWidth()), (int)(InputHandler.getMousePosition().y / getGame().getScaleHeight()));
-		
-		if(rec1.intersects(rec2)){
-			//System.out.println(Bitmask.collision(rec1,rec2, new Bitmask(bA), new Bitmask(bB)));
-		}
-	}
+		menuButtons.update();
 
+	}
 }

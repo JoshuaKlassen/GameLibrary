@@ -127,7 +127,6 @@ public class InputKey {
 		boolean result = false;
 		
 		if(o instanceof InputKey){
-			InputKey ok = (InputKey)o;
 			result = ((InputKey) o).getKeys().equals(getKeys());
 		}
 		
