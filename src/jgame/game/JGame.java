@@ -88,6 +88,8 @@ public abstract class JGame extends Canvas implements Runnable{
 	private GraphicsEnvironment graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
 	private GraphicsDevice graphicsDevice = graphicsEnvironment.getDefaultScreenDevice();
 	
+	private State currentState;
+	
 	/**
 	 * Constructor for the JGame object.
 	 * <br/> Takes a screen width and a screen height as parameters.
@@ -200,7 +202,9 @@ public abstract class JGame extends Canvas implements Runnable{
 	 * @param g
 	 */
 	public void render(Graphics g){
-		//TODO once States have been made
+		if(currentState != null){
+			currentState.render(g);
+		}
 	}
 	
 	/**
@@ -208,7 +212,14 @@ public abstract class JGame extends Canvas implements Runnable{
 	 * Handles all of the updates.
 	 */
 	public void update(){
-		//TODO once States have been made
+		if(currentState != null){
+			currentState.update();
+		}
+	}
+	
+	public void transitionState(State nextState){
+		currentState = nextState;
+		System.gc();
 	}
 	
 	/**

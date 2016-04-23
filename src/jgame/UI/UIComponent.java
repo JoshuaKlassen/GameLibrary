@@ -2,6 +2,7 @@ package jgame.UI;
 
 import java.awt.Graphics;
 
+import jgame.graphics.Drawable;
 import jgame.util.Vector2I;
 
 /**
@@ -13,7 +14,7 @@ import jgame.util.Vector2I;
  * <br/>Allows for the creation of custom UIComponents for the game to display.
  * @author Joshua Klassen
  */
-public abstract class UIComponent {
+public abstract class UIComponent implements Drawable{
 
 	//the position
 	protected Vector2I position;
@@ -70,6 +71,8 @@ public abstract class UIComponent {
 	 * @return position.
 	 */
 	public Vector2I getPosition(){ return position; }
+	
+	public void setPosition(Vector2I pos){ this.position = pos; }
 	
 	/**
 	 * Returns the width of the UIComponent that 

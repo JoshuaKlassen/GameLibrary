@@ -120,6 +120,16 @@ public class UIPanel extends UIComponent{
 			for(UIComponent c : components) c.render(g);
 		}
 	}
+	
+	@Override
+	public void setPosition(Vector2I pos){
+		Vector2I originalPosition = position;
+		super.setPosition(pos);
+		for(UIComponent c : components){
+			c.getPosition().subtract(originalPosition);
+			c.getPosition().add(position);
+		}
+	}
 
 	/**
 	 * Sets the background color of the panel.
