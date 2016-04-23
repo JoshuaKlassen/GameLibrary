@@ -1,8 +1,8 @@
 package jgame.UI;
 
 import java.awt.Graphics;
+import java.util.ArrayList;
 
-import jgame.game.INPUT_KEY;
 import jgame.game.InputHandler;
 import jgame.game.InputKey;
 import jgame.util.Vector2I;
@@ -15,28 +15,38 @@ public class UIButton extends UIComponent{
 	private UIComponent highlightedState;
 	private UIComponent pressedState;
 	private UIComponent currentState;
-	private InputKey leftClick;
+	private ArrayList <InputKey> pressKeys;
 	
 	private ButtonAction action;
 	
 	private boolean highlighted;
 	private boolean isPressed;
+	private boolean mouseEnable;
 	
 	public UIButton(Vector2I position) {
 		super(position);
-		normalState = new UILabel(position, "Button");
-		currentState = normalState;
+		init();
 	}
 	
 	public UIButton(Vector2I position, int width, int height){
 		super(position, width, height);
+		init();
+	}
+	
+	private void init(){
 		normalState = new UILabel(position, "Button");
 		currentState = normalState;
-		
-		leftClick = new InputKey(INPUT_KEY.LEFT_CLICK);
-		if(!InputHandler.getKeys().contains(leftClick)){
-			InputHandler.add(leftClick);
+		pressKeys = new ArrayList<InputKey>();
+	}
+	
+	public void addPressKeys(InputKey... keys){
+		for(InputKey key : keys){
+			pressKeys.add(key);
 		}
+	}
+	
+	public ArrayList<InputKey> getPressKeys(){
+		return pressKeys;
 	}
 	
 	public void setNormalState(UIComponent state){
@@ -57,18 +67,24 @@ public class UIButton extends UIComponent{
 
 	@Override
 	public void update() {
-		if(contains(InputHandler.getScaledMousePosition())){
+		boolean keyPressed = false;
+		for(int i = 0; !keyPressed && i < pressKeys.size(); i ++){
+			if(pressKeys.get(i).isPressed())
+				keyPressed = true;
+		}
+		
+		if(mouseEnable && contains(InputHandler.getScaledMousePosition())){
 			if(!highlighted){
 				highlighted = true;
 			}
-			if(leftClick.isPressed()){
+			if(keyPressed){
 				isPressed = true;
 			}
 		}else{
 			highlighted = false;
 		}
 		
-		if(isPressed && !leftClick.isPressed()){
+		if(mouseEnable && isPressed && !keyPressed){
 			if(action != null){
 				action.doAction();
 			}
@@ -116,6 +132,10 @@ public class UIButton extends UIComponent{
 		if(isPressed){
 			isPressed = false;
 		}
+	}
+	
+	public void trackMouse(boolean track){
+		mouseEnable = track;
 	}
 	
 }

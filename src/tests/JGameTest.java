@@ -23,6 +23,8 @@ public class JGameTest extends JGame {
 
 	InputKey testKey = new InputKey(true, INPUT_KEY.VK_A);
 	
+	InputKey space = new InputKey(true, INPUT_KEY.VK_SPACE);
+	
 	InputKey escape = new InputKey(INPUT_KEY.VK_ESCAPE);
 	
 	int x = 0;
@@ -40,12 +42,12 @@ public class JGameTest extends JGame {
 	
 	Bitmask testMask = new Bitmask(Utility.loadImage("/BitmaskTest.png"));
 	
-	Delay delay = new Delay(10000);
+	Delay delay = new Delay(1000);
 
 	public JGameTest(int screenWidth, int screenHeight) {
 		super(screenWidth, screenHeight);
 		super.setJFrame(getDefaultJFrame());
-		//super.toggleFullScreen();
+		super.toggleFullScreen();
 		String serial = "Serialized data";
 		InputHandler.add(new InputKey(INPUT_KEY.LEFT_CLICK));
 		InputHandler.add(new InputKey(INPUT_KEY.LEFT_CLICK));
@@ -56,6 +58,7 @@ public class JGameTest extends JGame {
 		System.out.println(serial);
 		
 		InputHandler.add(testKey, escape);
+		InputHandler.add(space);
 		panel.setBackgroundColor(new Color(0x0000ff));
 		inner = new UIPanel(new Vector2I(10, 10), 20, 20);
 		inner.add(new UILabel(new Vector2I(20, 20), "Hello world!", Color.red));
@@ -77,10 +80,12 @@ public class JGameTest extends JGame {
 		
 		ButtonAction ba = new ButtonAction(){
 			public void doAction(){
-				System.out.println("Did it!");
+				screenshot();
 			}
 		};
 		button.setAction(ba);
+		button.trackMouse(true);
+		button.addPressKeys(new InputKey(INPUT_KEY.LEFT_CLICK), new InputKey(INPUT_KEY.VK_SPACE));
 		
 		panel.add(button);
 		
@@ -140,12 +145,10 @@ public class JGameTest extends JGame {
 			delay.start();
 		}
 		
-	
 		if(escape.isPressed()) stop();
-		p += 0.01;
-		if(p > 1) p = 0;
+		p += 0.02;
 		
-		progressbar.setProgress(p);
+		progressbar.setProgress(p%1);
 		
 		rec2.setLocation((int)(InputHandler.getMousePosition().x / getScaleWidth()), (int)(InputHandler.getMousePosition().y / getScaleHeight()));
 		
@@ -162,7 +165,7 @@ public class JGameTest extends JGame {
 		while(!test.isFullScreen() ||System.currentTimeMillis() - now < 2000){
 			
 		}
-		test.stop();
+		//test.stop();
 	}
 
 }
