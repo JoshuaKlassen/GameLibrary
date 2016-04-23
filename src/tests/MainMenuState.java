@@ -24,14 +24,18 @@ public class MainMenuState extends State {
 	private InputKey up = new InputKey(true, INPUT_KEY.UP);
 	private InputKey down = new InputKey(true, INPUT_KEY.DOWN);
 	private InputKey leftClick = new InputKey(INPUT_KEY.LEFT_CLICK);
+	private InputKey enter = new InputKey(true, INPUT_KEY.VK_C);
 	
 	private int BUTTON_WIDTH = 70;
 	private int BUTTON_HEIGHT = 40;
 	private int BUTTON_LIST_HEIGHT = 90;
+	private int NUMBER_OF_BUTTONS = 5;
 	
 	private Color buttonBackground = Color.gray;
 	
 	private UIButtonList menuButtons;
+	
+	private int buttonListPosition = 0;
 	
 	public MainMenuState(JGame game) {
 		super(game);
@@ -40,11 +44,10 @@ public class MainMenuState extends State {
 		
 		gameTitle = new UILabel(new Vector2I(centreScreen - 40, 70), "Sandbox", Color.RED);
 		
-		InputHandler.add(up, down, leftClick);
-
+		InputHandler.add(up, down, leftClick, enter);
 		menuButtons = new UIButtonList(new Vector2I(centreScreen - BUTTON_WIDTH/2 - 10, BUTTON_LIST_HEIGHT));
 		
-		for(int i = 0; i < 5; i ++){
+		for(int i = 0; i < NUMBER_OF_BUTTONS; i ++){
 			int height = BUTTON_LIST_HEIGHT + (i*15);
 			UIButton b = new UIButton(new Vector2I(centreScreen - BUTTON_WIDTH/2 - 10, height), BUTTON_WIDTH, BUTTON_HEIGHT/4);
 			UILabel name = new UILabel(b.getPosition().clone(), menuTitles[i]);
@@ -97,6 +100,15 @@ public class MainMenuState extends State {
 		};
 		startButton.setAction(singlePlayerAction);
 		
+		UIButton optionsButton = menuButtons.getButtons().get(NUMBER_OF_BUTTONS-2);
+		ButtonAction optionsAction = new ButtonAction(){
+			public void doAction(){
+				InputHandler.removeAll();
+				getGame().transitionState(new MenuOptionsState(getGame()));
+			}
+		};
+		optionsButton.setAction(optionsAction);
+		
 		//last button
 		UIButton exitButton = menuButtons.getButtons().get(menuButtons.getButtons().size()-1);
 		ButtonAction exitAction = new ButtonAction(){
@@ -116,13 +128,45 @@ public class MainMenuState extends State {
 		
 		menuButtons.render(g);
 		
+		g.setColor(Color.white);
+		g.drawString(buttonListPosition + "", 10, 10);
+		
 	}
 
 	@Override
 	public void update() {
 		gameTitle.update();
 		
+		if(up.isPressed()){
+			buttonListPosition --;
+		} 
+		if(down.isPressed()){
+			buttonListPosition ++;
+		}
+		
+		if(buttonListPosition < 0){
+			buttonListPosition = NUMBER_OF_BUTTONS-1;
+		}else if(buttonListPosition >= NUMBER_OF_BUTTONS){
+			buttonListPosition = 0;
+		}
+		
+		
 		menuButtons.update();
+		
+//		UIButton highlightedButton = menuButtons.getButtons().get(buttonListPosition);
+//
+//		if(!highlightedButton.isHighlighted()){
+//			highlightedButton.highlight();
+//			for(int i = 0; i < NUMBER_OF_BUTTONS; i ++){
+//				if(i != buttonListPosition)
+//					menuButtons.getButtons().get(i).unhighlight();
+//			}
+//		}
+//		
+//		if(enter.isPressed()){
+//			System.out.println(enter.isPressed());
+//			highlightedButton.press();
+//		}
 
 	}
 }

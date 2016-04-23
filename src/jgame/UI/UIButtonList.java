@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import jgame.util.Vector2I;
 
+//TODO keyboard highlights vs mouse highlights
 public class UIButtonList extends UIComponent{
 
 	private ArrayList<UIButton> buttonList = new ArrayList<UIButton>();
@@ -31,10 +32,11 @@ public class UIButtonList extends UIComponent{
 	public void update() {
 		for(UIButton button : buttonList){
 			button.update();
-			if(button.isPressed()){
+			if(button.isPressed() || button.isHighlighted()){
 				for(UIButton button2 : buttonList){
 					if(!button2.equals(button)){
 						button2.safeRelease();
+						button2.unhighlight();
 					}
 				}
 			}

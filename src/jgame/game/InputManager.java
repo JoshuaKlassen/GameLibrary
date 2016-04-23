@@ -145,7 +145,7 @@ final class InputManager extends KeyAdapter implements MouseListener, MouseMotio
 	 * Returns the mouse position on the JGame screen as a {@link jgame.util.Vector2I}.
 	 * @return the mouse position.
 	 */
-	public Vector2I getMousePosition() { return mousePosition; }
+	protected Vector2I getMousePosition() { return mousePosition; }
 	
 	/**
 	 * This method is called when the mouse is clicked,

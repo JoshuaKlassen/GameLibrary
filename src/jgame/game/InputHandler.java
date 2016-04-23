@@ -49,6 +49,10 @@ public final class InputHandler{
 		inputManager.removeInputKey(keys);
 	}
 	
+	public static void removeAll(){
+		inputManager.getInputKeys().clear();
+	}
+	
 	/**
 	 * Returns an {@link ArrayList} of the {@link InputKey}s
 	 * <br/>the InputHandler is listening for.
@@ -97,6 +101,7 @@ public final class InputHandler{
 	
 	protected static void init(JGame game){
 		InputHandler.game = game;
+		
 	}
 	
 	/*

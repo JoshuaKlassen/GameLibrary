@@ -74,6 +74,7 @@ public class UIButton extends UIComponent{
 				keyPressed = true;
 		}
 		
+		//TODO keyboard enable and mouse enable
 		if(mouseEnable && contains(InputHandler.getScaledMousePosition())){
 			if(!highlighted){
 				highlighted = true;
@@ -81,14 +82,13 @@ public class UIButton extends UIComponent{
 			if(keyPressed){
 				isPressed = true;
 			}
-		}else{
+		}else if(mouseEnable && !contains(InputHandler.getScaledMousePosition())){
 			highlighted = false;
 		}
 		
 		if(mouseEnable && isPressed && !keyPressed){
 			release();
 		}
-		
 		if(highlighted && !isPressed && highlightedState != null){
 			currentState = highlightedState;
 		}else if(isPressed && pressedState != null){
@@ -150,6 +150,10 @@ public class UIButton extends UIComponent{
 	
 	public boolean isPressed(){
 		return isPressed;
+	}
+	
+	public Drawable getCurrentState(){
+		return currentState;
 	}
 	
 }
