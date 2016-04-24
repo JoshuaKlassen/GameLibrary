@@ -53,6 +53,10 @@ public final class InputHandler{
 		inputManager.getInputKeys().clear();
 	}
 	
+	public static int getKeyTyped(){
+		return inputManager.getKeyTyped();
+	}
+	
 	/**
 	 * Returns an {@link ArrayList} of the {@link InputKey}s
 	 * <br/>the InputHandler is listening for.

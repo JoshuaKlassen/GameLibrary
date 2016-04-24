@@ -2,7 +2,10 @@ package jgame.UI;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
 
 import jgame.util.Vector2I;
 
@@ -89,7 +92,7 @@ public class UILabel extends UIComponent{
 		this.color = color;
 		this.font = font;
 	}
-
+	
 	/**
 	 * The overridden update method from {@link UIComponent}.
 	 * <br/>Has no effect on the label as is,
@@ -108,10 +111,26 @@ public class UILabel extends UIComponent{
 	@Override
 	public void render(Graphics g) {
 		if(show){
+			
+			//if(width == 0 || height == 0){
+				FontMetrics fm = ((Graphics2D)(g)).getFontMetrics(font);
+				Rectangle2D bounds = fm.getStringBounds(text, g);
+				setWidth((int)bounds.getWidth());
+				setHeight(fm.getAscent() - fm.getDescent());
+			//}
+			
+			//FontMetrics fm = ((Graphics2D)(g)).getFontMetrics(font);
+			//int textHeight = fm.getAscent();
 			g.setColor(color);
 			g.setFont(font);
-			g.drawString(text, position.x, position.y);
+			g.drawString(text, position.x, position.y + height);
+			g.drawRect(position.x, position.y, width, height);
 		}
+	}
+	
+	public boolean contains(Vector2I point){
+		return (point.x >= position.x) && (point.x <= position.x + width)
+				&& (point.y >= position.y) && (point.y <= position.y + height);
 	}
 	
 	/**

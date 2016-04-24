@@ -126,6 +126,11 @@ public abstract class UIComponent implements Drawable{
 		else show();
 	}
 	
+	public boolean contains(Vector2I point){
+		return (point.x >= position.x) && (point.x <= position.x + width)
+				&& (point.y >= position.y) && (point.y <= position.y + height);
+	}
+	
 	/**
 	 * Returns a {@link String} representation of the UIComponent.
 	 * @return a string representation of the object.

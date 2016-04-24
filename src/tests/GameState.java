@@ -7,7 +7,6 @@ import java.awt.Rectangle;
 import jgame.game.INPUT_KEY;
 import jgame.game.InputHandler;
 import jgame.game.InputKey;
-import jgame.game.JGame;
 import jgame.game.State;
 import jgame.graphics.Drawable;
 import jgame.util.Delay;
@@ -34,12 +33,12 @@ public class GameState extends State {
 	
 	private Drawable drawItem;
 	
-	public GameState(JGame game) {
+	public GameState(JGameTest game) {
 		super(game);
 		String serial = "Serialized data";
-		Utility.writeObject(serial, Utility.createDataFolder("objects") + "/test.dat");
-		System.out.println(Utility.createDataFolder("objects"));
-		serial = (String)Utility.readObject(Utility.createDataFolder("objects") + "/test.dat");
+		Utility.writeObject(serial, game.dataFilePath + "/test.dat");
+		
+		serial = (String)Utility.readObject(game.dataFilePath + "/test.dat");
 		
 		System.out.println(serial);
 		

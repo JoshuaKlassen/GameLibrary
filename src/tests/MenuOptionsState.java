@@ -6,10 +6,10 @@ import java.awt.Graphics;
 import jgame.UI.ButtonAction;
 import jgame.UI.UIButton;
 import jgame.UI.UILabel;
+import jgame.UI.UITextField;
 import jgame.game.INPUT_KEY;
 import jgame.game.InputHandler;
 import jgame.game.InputKey;
-import jgame.game.JGame;
 import jgame.game.State;
 import jgame.graphics.Drawable;
 import jgame.util.Vector2I;
@@ -24,11 +24,15 @@ public class MenuOptionsState extends State{
 	private Color gotoMenuButtonColor = Color.green;
 	private UIButton gotoMenuButton;
 	
+	private UITextField textField;
+	
 	private InputKey leftClick = new InputKey(INPUT_KEY.LEFT_CLICK);
 	
 	private InputKey escapeKey = new InputKey(INPUT_KEY.VK_ESCAPE);
 	
-	public MenuOptionsState(JGame game) {
+	UILabel temp = new UILabel(new Vector2I(50, 10), "test");
+	
+	public MenuOptionsState(JGameTest game) {
 		super(game);
 		
 		InputHandler.add(escapeKey, leftClick);
@@ -36,7 +40,7 @@ public class MenuOptionsState extends State{
 		gotoMenuButtonPosition = new Vector2I(10, (int)(getGame().getHeight() / getGame().getScaleHeight()) - gotoMenuButtonHeight - 10);
 		gotoMenuButton = new UIButton(gotoMenuButtonPosition, gotoMenuButtonWidth, gotoMenuButtonHeight);
 		
-		UILabel gotoMenuButtonLabel = new UILabel(Vector2I.add(gotoMenuButtonPosition, new Vector2I(10, 20)), "Go back", Color.black);
+		UILabel gotoMenuButtonLabel = new UILabel(Vector2I.add(gotoMenuButtonPosition, new Vector2I(5, 5)), "Go back", Color.black);
 		
 		Drawable gotoMenuButtonNormalState = new Drawable(){
 			public void render(Graphics g){
@@ -70,7 +74,9 @@ public class MenuOptionsState extends State{
 		
 		ButtonAction gotoMenuButtonAction = new ButtonAction(){
 			public void doAction(){
-				getGame().transitionState(new MainMenuState(getGame()));
+				game.settings.getSetting("Player Name").setValue(textField.getText());;
+				((JGameTest)(getGame())).saveSettings();
+				getGame().transitionState(new MainMenuState((JGameTest)getGame()));
 			}
 		};
 		
@@ -81,19 +87,32 @@ public class MenuOptionsState extends State{
 		gotoMenuButton.trackMouse(true);
 		gotoMenuButton.addPressKeys(leftClick);
 		
+		textField = new UITextField(new Vector2I(10, 10), game.settings.getSetting("Player Name").getValue().toString());
+		
 		
 	}
 
 	@Override
 	public void render(Graphics g) {
 		gotoMenuButton.render(g);
+		textField.render(g);
+		
+		g.setColor(Color.white);
+		g.drawString(textField.hasFocus() + ":" + InputHandler.getScaledMousePosition() + ":" + textField.getPosition(), 10, 60);
 	}
 
 	@Override
 	public void update() {
 		gotoMenuButton.update();
 		if(escapeKey.isPressed()){
-			getGame().transitionState(new MainMenuState(getGame()));
+			getGame().transitionState(new MainMenuState((JGameTest)getGame()));
+		}
+		textField.update();
+		
+		if(textField.contains(InputHandler.getScaledMousePosition())){
+			textField.setFocus(true);
+		}else{
+			textField.setFocus(false);
 		}
 	}
 

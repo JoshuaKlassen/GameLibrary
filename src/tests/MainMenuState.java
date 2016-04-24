@@ -11,7 +11,6 @@ import jgame.UI.UILabel;
 import jgame.game.INPUT_KEY;
 import jgame.game.InputHandler;
 import jgame.game.InputKey;
-import jgame.game.JGame;
 import jgame.game.State;
 import jgame.graphics.Drawable;
 import jgame.util.Vector2I;
@@ -37,7 +36,7 @@ public class MainMenuState extends State {
 	
 	private int buttonListPosition = 0;
 	
-	public MainMenuState(JGame game) {
+	public MainMenuState(JGameTest game) {
 		super(game);
 		
 		int centreScreen = (int)(getGame().getWidth()/2 / getGame().getScaleWidth());
@@ -51,10 +50,8 @@ public class MainMenuState extends State {
 			int height = BUTTON_LIST_HEIGHT + (i*15);
 			UIButton b = new UIButton(new Vector2I(centreScreen - BUTTON_WIDTH/2 - 10, height), BUTTON_WIDTH, BUTTON_HEIGHT/4);
 			UILabel name = new UILabel(b.getPosition().clone(), menuTitles[i]);
-			name.getPosition().x += 15;
 			name.setColor(Color.blue);
 			name.setFont(new Font(name.getFont().getFontName(), name.getFont().getStyle(), 9));
-			name.getPosition().y += 7;
 			Drawable normal = new Drawable(){
 				public void render(Graphics g){
 					g.setColor(buttonBackground);
@@ -95,7 +92,7 @@ public class MainMenuState extends State {
 		UIButton startButton = menuButtons.getButtons().get(0);
 		ButtonAction singlePlayerAction = new ButtonAction(){
 			public void doAction(){
-				getGame().transitionState(new GameState(getGame()));
+				getGame().transitionState(new GameState((JGameTest)getGame()));
 			}
 		};
 		startButton.setAction(singlePlayerAction);
@@ -104,7 +101,7 @@ public class MainMenuState extends State {
 		ButtonAction optionsAction = new ButtonAction(){
 			public void doAction(){
 				InputHandler.removeAll();
-				getGame().transitionState(new MenuOptionsState(getGame()));
+				getGame().transitionState(new MenuOptionsState((JGameTest)getGame()));
 			}
 		};
 		optionsButton.setAction(optionsAction);

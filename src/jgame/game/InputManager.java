@@ -32,6 +32,8 @@ final class InputManager extends KeyAdapter implements MouseListener, MouseMotio
 	//the mouse wheel rotation
 	private int mouseWheelRotation = 0;
 	
+	private int keyTyped = 0;
+	
 	/**
 	 * Adds {@link InputKey}'s for the InputManager to listen for.
 	 * @param inputKey
@@ -97,6 +99,20 @@ final class InputManager extends KeyAdapter implements MouseListener, MouseMotio
 				}
 			}
 		}
+	}
+	
+	@Override
+	public void keyTyped(KeyEvent e){
+		keyTyped = e.getKeyChar();
+	}
+	
+	protected int getKeyTyped(){
+		int result = 0;
+		if(keyTyped != 0){
+			result = keyTyped;
+			keyTyped = 0;
+		}
+		return result;
 	}
 	
 	/**
