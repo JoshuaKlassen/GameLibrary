@@ -32,9 +32,12 @@ public abstract class JClient {
 
 	private long pingStartTime;
 	private int pingAttempt = 0;
-	
+
 	public static int maxPingAttempts = 5;
 
+	private int reconnectAttempt = 0;
+
+	public static int maxReconnectAttempts = 5;
 	private boolean pingRunning = false;
 
 	private Thread pingThread;
@@ -45,14 +48,13 @@ public abstract class JClient {
 			this.port = port;
 
 			udpSocket = new DatagramSocket();
-
+			
 			tcpSocket = new Socket(serverAddress, port);
 
 			oos = new ObjectOutputStream(tcpSocket.getOutputStream());
 			ois = new ObjectInputStream(tcpSocket.getInputStream());
 
 			sendHandshake();
-
 			if (completeHandshake()) {
 				startTcpListeningToServer();
 				startUdpListeningToServer();
@@ -66,13 +68,34 @@ public abstract class JClient {
 			e.printStackTrace();
 		}
 	}
-	
+
+	public void startClient() {
+		try {
+			udpSocket = new DatagramSocket();
+			
+			oos = new ObjectOutputStream(tcpSocket.getOutputStream());
+			ois = new ObjectInputStream(tcpSocket.getInputStream());
+
+			sendHandshake();
+			if (completeHandshake()) {
+				startTcpListeningToServer();
+				startUdpListeningToServer();
+				onConnection();
+				ping();
+			} else {
+				close();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public abstract void processTcpPacket(Packet data);
 
 	public abstract void processUdpPacket(Packet data);
-	
+
 	public abstract void onConnection();
-	
+
 	public abstract void onPingResponse(long delay);
 
 	private void sendHandshake() {
@@ -94,7 +117,7 @@ public abstract class JClient {
 						}
 					}
 				} catch (IOException e) {
-					ErrorManager.appendToLog(e.getMessage());
+					startAttemptingReconnect();
 				}
 			}
 		};
@@ -201,7 +224,7 @@ public abstract class JClient {
 				pingRunning = true;
 				while (pingRunning) {
 					pingAttempt++;
-					
+
 					Packet ping = new Packet(PacketType.PING, pingAttempt);
 					pingStartTime = System.currentTimeMillis();
 					sendUdp(ping);
@@ -209,7 +232,8 @@ public abstract class JClient {
 					Delay waitDelay = new Delay(pingDelay);
 					waitDelay.start();
 
-					while (!waitDelay.isOver());
+					while (!waitDelay.isOver())
+						;
 
 					if (pingAttempt == maxPingAttempts) {
 						pingRunning = false;
@@ -221,19 +245,53 @@ public abstract class JClient {
 		pingThread.start();
 
 	}
-	
-	private void timedOut(){
+
+	private synchronized void startAttemptingReconnect() {
+		Thread attemptReconnectThread = new Thread("Reconnection Attempt") {
+			public void run() {
+				pingRunning = false;
+				boolean reconnected = false;
+				close();
+
+				while (!reconnected && reconnectAttempt <= maxReconnectAttempts) {
+					reconnectAttempt++;
+					try {
+						tcpSocket = new Socket(serverAddress, port);
+						reconnected = true;
+					} catch (IOException e) {
+						ErrorManager.write(e.getMessage());
+					}
+
+					Delay waitDelay = new Delay(5000);
+					waitDelay.start();
+
+					while (!waitDelay.isOver());
+
+				}
+
+				if (!reconnected) {
+					close();
+				} else {
+					System.out.println("reconnected!");
+					startClient();
+				}
+			}
+		};
+		attemptReconnectThread.start();
+	}
+
+	private void timedOut() {
 		ErrorManager.write("Connected timed out");
 		close();
 	}
-	
+
 	public synchronized void close() {
 		Thread closeThread = new Thread("Close connection") {
 			public void run() {
 				try {
 					synchronized (tcpSocket) {
 						pingRunning = false;
-						
+
 						tcpListening = false;
 						oos.flush();
 						oos.close();
