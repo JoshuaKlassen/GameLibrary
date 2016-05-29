@@ -10,7 +10,6 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.ArrayList;
 
 import jgame.util.Delay;
@@ -31,11 +30,11 @@ public abstract class JServer {
 
 	private boolean tcpServerRunning;
 	private boolean udpServerRunning;
-	
+
 	private int maxConnectionAttempts = 5;
-	
+
 	private int timeOutDelay = 5000;
-	
+
 	private ArrayList<ConnectedClient> clients;
 	private ArrayList<Integer> clientsConnected;
 
@@ -47,7 +46,7 @@ public abstract class JServer {
 
 			clients = new ArrayList<ConnectedClient>();
 			clientsConnected = new ArrayList<Integer>();
-			
+
 			tcpSocket = new ServerSocket(port);
 			udpSocket = new DatagramSocket(port);
 		} catch (IOException e) {
@@ -71,9 +70,9 @@ public abstract class JServer {
 
 						ConnectedClient client = new ConnectedClient(connectedSocket);
 
-						if(!clients.contains(client)){
+						if (!clients.contains(client)) {
 							clients.add(client);
-							
+
 							try {
 								completeHandshake(client);
 								onClientConnection(client);
@@ -95,22 +94,18 @@ public abstract class JServer {
 		Thread listenToClient = new Thread("Tcp connection: " + client.getAddress() + ":" + client.getTcpPort()) {
 			public void run() {
 				boolean listenToClient = true;
-				try {
-					while (listenToClient && client.isConnected()) {
-						try {
-							Packet data = (Packet) client.getTcpInputStream().readObject();
-							processTcpPacket(client, data);
-						} catch (ClassNotFoundException e) {
-							ErrorManager.appendToLog(e.getMessage());
-						} catch (SocketException e) {
-							if(!client.isAttemptingConnection()){
-								client.isAttemptingConnection(true);
-								checkClientConnectionStatus(client);
-							}
+				while (listenToClient && client.isConnected()) {
+					try {
+						Packet data = (Packet) client.getTcpInputStream().readObject();
+						processTcpPacket(client, data);
+					} catch (ClassNotFoundException e) {
+						e.printStackTrace();
+					} catch (IOException e) {
+						if (!client.isAttemptingConnection()) {
+							client.isAttemptingConnection(true);
+							checkClientConnectionStatus(client);
 						}
 					}
-				} catch (IOException e) {
-					ErrorManager.appendToLog(e.getMessage());
 				}
 			}
 		};
@@ -159,24 +154,25 @@ public abstract class JServer {
 						udpSocket.receive(packet);
 						ByteArrayInputStream bais = new ByteArrayInputStream(packet.getData());
 						ObjectInputStream ois = new ObjectInputStream(bais);
-						PacketType type = (PacketType)ois.readObject();
-						Serializable packetData = (Serializable)ois.readObject();
+						PacketType type = (PacketType) ois.readObject();
+						Serializable packetData = (Serializable) ois.readObject();
 						Packet packetRecieved = new Packet(type, packetData);
-						
+
 						ConnectedClient sender = null;
-						for(int i = 0; i < clients.size() && sender == null; i ++){
+						for (int i = 0; i < clients.size() && sender == null; i++) {
 							ConnectedClient temp = clients.get(i);
-							if(temp.getAddress().equals(packet.getAddress()) && temp.getUdpPort() == packet.getPort()){
+							if (temp.getAddress().equals(packet.getAddress())
+									&& temp.getUdpPort() == packet.getPort()) {
 								sender = temp;
 							}
 						}
-						
-						if(sender != null){
-							if(type == PacketType.CONNECTATTEMPT){
+
+						if (sender != null) {
+							if (type == PacketType.CONNECTATTEMPT) {
 								clientsConnected.add(sender.getID());
-							}else if(type == PacketType.PING){
+							} else if (type == PacketType.PING) {
 								sendUdp(sender, packetRecieved);
-							}else{
+							} else {
 								processUdpPacket(packetRecieved);
 							}
 						}
@@ -212,7 +208,8 @@ public abstract class JServer {
 			public void run() {
 				try {
 					byte[] packetData = data.convertContentToByteArray();
-					DatagramPacket packet = new DatagramPacket(packetData, packetData.length, client.getAddress(), client.getUdpPort());
+					DatagramPacket packet = new DatagramPacket(packetData, packetData.length, client.getAddress(),
+							client.getUdpPort());
 					client.getUdpSocket().send(packet);
 				} catch (IOException e) {
 					ErrorManager.appendToLog(e.getMessage());
@@ -221,37 +218,38 @@ public abstract class JServer {
 		};
 		sendUdp.start();
 	}
-	
-	public synchronized void sendToAllUdp(Packet packet){
-		for(int i = 0; i < clients.size(); i ++){
+
+	public synchronized void sendToAllUdp(Packet packet) {
+		for (int i = 0; i < clients.size(); i++) {
 			sendUdp(clients.get(i), packet);
 		}
 	}
-	
-	private synchronized void checkClientConnectionStatus(ConnectedClient client){
-		Thread clientConnectionStatusThread = new Thread("Client: " + client.getID() + " connection status"){
-			public void run(){
+
+	private synchronized void checkClientConnectionStatus(ConnectedClient client) {
+		Thread clientConnectionStatusThread = new Thread("Client: " + client.getID() + " connection status") {
+			public void run() {
 				boolean checkStatusRunning = true;
 				ErrorManager.write("Lost connection to client.");
-				while(checkStatusRunning){
+				while (checkStatusRunning) {
 					client.attemptedConnection();
 					ErrorManager.write("Attempting connection... " + client.getConnectAttempts());
 					Packet packet = new Packet(PacketType.CONNECTATTEMPT, "");
 					sendUdp(client, packet);
-					
+
 					Delay waitDelay = new Delay(timeOutDelay);
 					waitDelay.start();
-					
-					while(!waitDelay.isOver());
-					
-					if(clientsConnected.contains(client.getID())){
-						clientsConnected.remove((Integer)client.getID());
+
+					while (!waitDelay.isOver())
+						;
+
+					if (clientsConnected.contains(client.getID())) {
+						clientsConnected.remove((Integer) client.getID());
 						client.resetConnectAttempts();
 						checkStatusRunning = false;
 						client.isAttemptingConnection(false);
 					}
-					
-					if(client.getConnectAttempts() == maxConnectionAttempts){
+
+					if (client.getConnectAttempts() == maxConnectionAttempts) {
 						timeOut(client);
 						checkStatusRunning = false;
 					}
@@ -260,15 +258,15 @@ public abstract class JServer {
 		};
 		clientConnectionStatusThread.start();
 	}
-	
-	private void timeOut(ConnectedClient client){
+
+	private void timeOut(ConnectedClient client) {
 		clients.remove(client);
 		client.timeOut();
 		onTimeOut(client);
 	}
-	
+
 	public abstract void onTimeOut(ConnectedClient client);
-	
+
 	public abstract void onClientConnection(ConnectedClient client);
 
 	public abstract void processTcpPacket(ConnectedClient client, Packet packet);

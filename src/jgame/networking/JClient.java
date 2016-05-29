@@ -9,7 +9,6 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.SocketException;
 
 import jgame.util.Delay;
 import jgame.util.ErrorManager;
@@ -39,8 +38,6 @@ public abstract class JClient {
 	private boolean pingRunning = false;
 
 	private Thread pingThread;
-	
-	private boolean emergencyPing = false;
 
 	public JClient(String address, int port) {
 		try {
@@ -94,11 +91,6 @@ public abstract class JClient {
 							processTcpPacket(data);
 						} catch (ClassNotFoundException e) {
 							ErrorManager.appendToLog(e.getMessage());
-						} catch (SocketException e) {
-							if(!emergencyPing){
-								ErrorManager.write("Lost connection.");
-								emergencyPing = true;
-							}
 						}
 					}
 				} catch (IOException e) {
@@ -131,11 +123,6 @@ public abstract class JClient {
 							long now = System.currentTimeMillis();
 							pingAttempt = 0;
 
-							if(emergencyPing){
-								emergencyPing = false;
-								System.out.println("Connection re-established");
-							}
-							
 							onPingResponse(now - pingStartTime);
 						} else {
 							processUdpPacket(packetReceived);
@@ -214,9 +201,6 @@ public abstract class JClient {
 				pingRunning = true;
 				while (pingRunning) {
 					pingAttempt++;
-					if(emergencyPing){
-						ErrorManager.write("Attempting to re-establish connection... " + pingAttempt);
-					}
 					
 					Packet ping = new Packet(PacketType.PING, pingAttempt);
 					pingStartTime = System.currentTimeMillis();
@@ -237,7 +221,7 @@ public abstract class JClient {
 		pingThread.start();
 
 	}
-
+	
 	private void timedOut(){
 		ErrorManager.write("Connected timed out");
 		close();

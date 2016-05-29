@@ -3,9 +3,9 @@ package jgame.UI;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import jgame.util.Vector2I;
-
 import org.w3c.dom.ranges.RangeException;
+
+import jgame.util.Vector2I;
 
 /**
  * The UIProgressBar class.
