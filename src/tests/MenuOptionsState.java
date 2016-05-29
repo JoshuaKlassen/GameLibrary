@@ -30,12 +30,14 @@ public class MenuOptionsState extends State{
 	
 	private InputKey escapeKey = new InputKey(INPUT_KEY.VK_ESCAPE);
 	
+	private InputKey enterKey = new InputKey(INPUT_KEY.VK_ENTER);
+	
 	UILabel temp = new UILabel(new Vector2I(50, 10), "test");
 	
 	public MenuOptionsState(JGameTest game) {
 		super(game);
 		
-		InputHandler.add(escapeKey, leftClick);
+		InputHandler.add(escapeKey, leftClick, enterKey);
 
 		gotoMenuButtonPosition = new Vector2I(10, (int)(getGame().getHeight() / getGame().getScaleHeight()) - gotoMenuButtonHeight - 10);
 		gotoMenuButton = new UIButton(gotoMenuButtonPosition, gotoMenuButtonWidth, gotoMenuButtonHeight);
@@ -110,9 +112,17 @@ public class MenuOptionsState extends State{
 		textField.update();
 		
 		if(textField.contains(InputHandler.getScaledMousePosition())){
-			textField.setFocus(true);
-		}else{
-			textField.setFocus(false);
+			if(leftClick.isPressed()){
+				textField.setFocus(true);
+			}
+		}
+		
+		if(textField.hasFocus()){
+			if(enterKey.isPressed()){
+				((JGameTest)(getGame())).settings.getSetting("Player Name").setValue(textField.getText());
+				((JGameTest)(getGame())).saveSettings();
+				textField.setFocus(false);
+			}
 		}
 	}
 
