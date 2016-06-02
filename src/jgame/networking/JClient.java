@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 
 import jgame.util.Delay;
@@ -20,11 +21,12 @@ public abstract class JClient {
 	private Socket tcpSocket;
 	private DatagramSocket udpSocket;
 
-	private InetAddress serverAddress;
-
 	private ObjectOutputStream oos;
 	private ObjectInputStream ois;
 
+	private InetAddress serverAddress;
+	private InetSocketAddress serverSocketAddress;
+	
 	private boolean tcpListening = false;
 	private boolean udpListening = false;
 
@@ -35,34 +37,24 @@ public abstract class JClient {
 
 	public static int maxPingAttempts = 5;
 
-	private int reconnectAttempt = 0;
+	private int reconnectAttempt = 1;
 
 	public static int maxReconnectAttempts = 5;
 	private boolean pingRunning = false;
 
 	private Thread pingThread;
-
+	
 	public JClient(String address, int port) {
 		try {
 			serverAddress = InetAddress.getByName(address);
 			this.port = port;
-
-			udpSocket = new DatagramSocket();
 			
-			tcpSocket = new Socket(serverAddress, port);
+			serverSocketAddress = new InetSocketAddress(address, port);
 
-			oos = new ObjectOutputStream(tcpSocket.getOutputStream());
-			ois = new ObjectInputStream(tcpSocket.getInputStream());
-
-			sendHandshake();
-			if (completeHandshake()) {
-				startTcpListeningToServer();
-				startUdpListeningToServer();
-				onConnection();
-				ping();
-			} else {
-				close();
-			}
+			tcpSocket = new Socket();
+			tcpSocket.connect(serverSocketAddress);
+			
+			startClient();
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -97,6 +89,12 @@ public abstract class JClient {
 	public abstract void onConnection();
 
 	public abstract void onPingResponse(long delay);
+	
+	public abstract void onAttemptReconnect(int reconnectAttempt);
+	
+	public abstract void onReconnectSucceeded();
+	
+	public abstract void onReconnectFailed();
 
 	private void sendHandshake() {
 		Packet handshake = new Packet(PacketType.HANDSHAKE, udpSocket.getLocalPort());
@@ -106,6 +104,7 @@ public abstract class JClient {
 	private synchronized void startTcpListeningToServer() {
 		Thread tcpListenToServer = new Thread("Tcp connection: " + serverAddress + ":" + port) {
 			public void run() {
+				System.out.println("stuff");
 				try {
 					tcpListening = true;
 					while (tcpListening) {
@@ -117,6 +116,7 @@ public abstract class JClient {
 						}
 					}
 				} catch (IOException e) {
+					ErrorManager.write(e.getMessage());
 					startAttemptingReconnect();
 				}
 			}
@@ -142,11 +142,10 @@ public abstract class JClient {
 						Packet packetReceived = new Packet(type, contents);
 						if (type == PacketType.CONNECTATTEMPT) {
 							sendUdp(packetReceived);
-						} else if (type == PacketType.PING && (Integer) contents == pingAttempt) {
+						} else if (type == PacketType.PING) {
 							long now = System.currentTimeMillis();
 							pingAttempt = 0;
-
-							onPingResponse(now - pingStartTime);
+							onPingResponse((short)(now - (long)contents));
 						} else {
 							processUdpPacket(packetReceived);
 						}
@@ -225,15 +224,15 @@ public abstract class JClient {
 				while (pingRunning) {
 					pingAttempt++;
 
-					Packet ping = new Packet(PacketType.PING, pingAttempt);
 					pingStartTime = System.currentTimeMillis();
+					Packet ping = new Packet(PacketType.PING, pingStartTime);
+					
 					sendUdp(ping);
 
 					Delay waitDelay = new Delay(pingDelay);
 					waitDelay.start();
 
-					while (!waitDelay.isOver())
-						;
+					while (!waitDelay.isOver());
 
 					if (pingAttempt == maxPingAttempts) {
 						pingRunning = false;
@@ -249,30 +248,34 @@ public abstract class JClient {
 	private synchronized void startAttemptingReconnect() {
 		Thread attemptReconnectThread = new Thread("Reconnection Attempt") {
 			public void run() {
+				reconnectAttempt = 1;
 				pingRunning = false;
 				boolean reconnected = false;
 				close();
 
 				while (!reconnected && reconnectAttempt <= maxReconnectAttempts) {
-					reconnectAttempt++;
 					try {
-						tcpSocket = new Socket(serverAddress, port);
+						onAttemptReconnect(reconnectAttempt);
+						tcpSocket = new Socket();
+						tcpSocket.connect(serverSocketAddress, 1000);
+						tcpSocket.setSoTimeout(0);
 						reconnected = true;
-					} catch (IOException e) {
-						ErrorManager.write(e.getMessage());
+						reconnectAttempt = 1;
+					} catch (IOException e){
+						reconnectAttempt ++;
+
+						Delay waitDelay = new Delay(5000);
+						waitDelay.start();
+
+						while (!waitDelay.isOver());
 					}
-
-					Delay waitDelay = new Delay(5000);
-					waitDelay.start();
-
-					while (!waitDelay.isOver());
-
 				}
 
 				if (!reconnected) {
+					onReconnectFailed();
 					close();
 				} else {
-					System.out.println("reconnected!");
+					onReconnectSucceeded();
 					startClient();
 				}
 			}
@@ -294,8 +297,8 @@ public abstract class JClient {
 
 						tcpListening = false;
 						oos.flush();
-						oos.close();
-						ois.close();
+						tcpSocket.shutdownOutput();
+						tcpSocket.shutdownInput();
 						tcpSocket.close();
 
 						udpListening = false;

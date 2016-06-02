@@ -32,6 +32,7 @@ public class ConnectedClient {
 	private boolean connected = true;
 	
 	public ConnectedClient(Socket tcpSocket){
+		connected = true;
 		this.tcpSocket = tcpSocket;
 		tcpPort = tcpSocket.getLocalPort();
 		address = tcpSocket.getInetAddress();
@@ -80,9 +81,11 @@ public class ConnectedClient {
 		try{
 			connected = false;
 			tcpOutputStream.flush();
-			tcpOutputStream.close();
-			tcpInputStream.close();
+			tcpSocket.shutdownOutput();
+			tcpSocket.shutdownInput();
 			tcpSocket.close();
+			
+			udpSocket.disconnect();
 			udpSocket.close();
 		}catch(IOException e){
 			e.printStackTrace();
