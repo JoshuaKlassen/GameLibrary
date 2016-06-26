@@ -98,8 +98,8 @@ public abstract class JServer {
 				try {
 					while (listenToClient && client.isConnected()) {
 						try {
-							Packet data = (Packet) client.getTcpInputStream().readObject();
-							processTcpPacket(client, data);
+							Packet packet = (Packet) client.getTcpInputStream().readObject();
+							processTcpPacket(client, packet.getContents());
 						} catch (ClassNotFoundException e) {
 							ErrorManager.appendToLog(e.getMessage());
 						} catch (SocketException e) {
@@ -160,27 +160,21 @@ public abstract class JServer {
 						ByteArrayInputStream bais = new ByteArrayInputStream(packet.getData());
 						ObjectInputStream ois = new ObjectInputStream(bais);
 						PacketType type = (PacketType)ois.readObject();
-						Serializable packetData = (Serializable)ois.readObject();
-						Packet packetRecieved = new Packet(type, packetData);
+						Serializable contents = (Serializable)ois.readObject();
 						
-						ConnectedClient sender = null;
-						for(int i = 0; i < clients.size() && sender == null; i ++){
-							ConnectedClient temp = clients.get(i);
-							if(temp.getAddress().equals(packet.getAddress()) && temp.getUdpPort() == packet.getPort()){
-								sender = temp;
+						ConnectedClient client = null;
+						for(int i = 0; i < clients.size() && client == null; i ++){
+							ConnectedClient currentClient = clients.get(i);
+							if(currentClient.getAddress().equals(packet.getAddress()) && currentClient.getUdpPort() == packet.getPort()){
+								client = currentClient;
 							}
 						}
 						
-						if(sender != null){
-							if(type == PacketType.CONNECTATTEMPT){
-								clientsConnected.add(sender.getID());
-							}else if(type == PacketType.PING){
-								sendUdp(sender, packetRecieved);
-							}else{
-								processUdpPacket(packetRecieved);
-							}
+						if(client != null){
+							processUdpPacket(client, type, contents);
 						}
 
+						ois.close();
 						bais.close();
 					} catch (IOException | ClassNotFoundException e) {
 						ErrorManager.appendToLog(e.getMessage());
@@ -192,7 +186,17 @@ public abstract class JServer {
 		udpServerThread.start();
 	}
 
-	public synchronized void sendTcp(ConnectedClient client, Packet packet) {
+	private void processUdpPacket(ConnectedClient client, PacketType type, Serializable contents){
+		if(type == PacketType.CONNECTION){
+			clientsConnected.add(client.getID());
+		}else if(type == PacketType.PING){
+			sendUdp(client, new Packet(type, contents));
+		}else{
+			processUdpPacket(client, contents);
+		}
+	}
+	
+	private synchronized void sendTcp(ConnectedClient client, Packet packet) {
 		Thread sendTcp = new Thread("Send (TCP) to: " + client.getAddress() + ":" + client.getTcpPort()) {
 			public void run() {
 				ObjectOutputStream oos = client.getTcpOutputStream();
@@ -207,7 +211,7 @@ public abstract class JServer {
 		sendTcp.start();
 	}
 
-	public synchronized void sendUdp(ConnectedClient client, Packet data) {
+	private synchronized void sendUdp(ConnectedClient client, Packet data) {
 		Thread sendUdp = new Thread("Send (UDP) to: " + client.getAddress() + ":" + client.getUdpPort()) {
 			public void run() {
 				try {
@@ -222,7 +226,13 @@ public abstract class JServer {
 		sendUdp.start();
 	}
 	
-	public synchronized void sendToAllUdp(Packet packet){
+	public synchronized void sendToAllTcp(Packet packet){
+		for(int i = 0; i < clients.size(); i ++){
+			sendTcp(clients.get(i), packet);
+		}
+	}
+	
+	private synchronized void sendToAllUdp(Packet packet){
 		for(int i = 0; i < clients.size(); i ++){
 			sendUdp(clients.get(i), packet);
 		}
@@ -236,7 +246,7 @@ public abstract class JServer {
 				while(checkStatusRunning){
 					client.attemptedConnection();
 					ErrorManager.write("Attempting connection... " + client.getConnectAttempts());
-					Packet packet = new Packet(PacketType.CONNECTATTEMPT, "");
+					Packet packet = new Packet(PacketType.CONNECTION, "");
 					sendUdp(client, packet);
 					
 					Delay waitDelay = new Delay(timeOutDelay);
@@ -267,13 +277,29 @@ public abstract class JServer {
 		onTimeOut(client);
 	}
 	
+	public void sendTcp(ConnectedClient client, Serializable data){
+		sendTcp(client, new Packet(PacketType.DATA, data));
+	}
+	
+	public void sendToAllTcp(Serializable data){
+		sendToAllTcp(new Packet(PacketType.DATA, data));
+	}
+	
+	public void sendUdp(ConnectedClient client, Serializable data){
+		sendUdp(client, new Packet(PacketType.DATA, data));
+	}
+	
+	public void sendToAllUdp(Serializable data){
+		sendToAllUdp(new Packet(PacketType.DATA, data));
+	}
+	
 	public abstract void onTimeOut(ConnectedClient client);
 	
 	public abstract void onClientConnection(ConnectedClient client);
 
-	public abstract void processTcpPacket(ConnectedClient client, Packet packet);
+	public abstract void processTcpPacket(ConnectedClient client, Serializable data);
 
-	public abstract void processUdpPacket(Packet packet);
+	public abstract void processUdpPacket(ConnectedClient client, Serializable data);
 
 	public int getPort() {
 		return port;

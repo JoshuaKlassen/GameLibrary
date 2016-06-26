@@ -42,6 +42,7 @@ public abstract class JClient {
 	public static int maxReconnectAttempts = 5;
 	private boolean pingRunning = false;
 
+	private Thread udpListenToServer;
 	private Thread pingThread;
 	
 	public JClient(String address, int port) {
@@ -82,9 +83,9 @@ public abstract class JClient {
 		}
 	}
 
-	public abstract void processTcpPacket(Packet data);
+	public abstract void processTcpPacket(Serializable data);
 
-	public abstract void processUdpPacket(Packet data);
+	public abstract void processUdpPacket(Serializable data);
 
 	public abstract void onConnection();
 
@@ -104,7 +105,6 @@ public abstract class JClient {
 	private synchronized void startTcpListeningToServer() {
 		Thread tcpListenToServer = new Thread("Tcp connection: " + serverAddress + ":" + port) {
 			public void run() {
-				System.out.println("stuff");
 				try {
 					tcpListening = true;
 					while (tcpListening) {
@@ -117,6 +117,8 @@ public abstract class JClient {
 					}
 				} catch (IOException e) {
 					ErrorManager.write(e.getMessage());
+					udpListening = false;
+					udpSocket.close();
 					startAttemptingReconnect();
 				}
 			}
@@ -125,7 +127,7 @@ public abstract class JClient {
 	}
 
 	private synchronized void startUdpListeningToServer() {
-		Thread udpListenToServer = new Thread("Udp connection: " + serverAddress + ":" + udpSocket.getPort()) {
+		udpListenToServer = new Thread("Udp connection: " + serverAddress + ":" + udpSocket.getPort()) {
 			public void run() {
 				udpListening = true;
 				while (udpListening) {
@@ -139,27 +141,40 @@ public abstract class JClient {
 						PacketType type = (PacketType) ois.readObject();
 						Serializable contents = (Serializable) ois.readObject();
 
-						Packet packetReceived = new Packet(type, contents);
-						if (type == PacketType.CONNECTATTEMPT) {
-							sendUdp(packetReceived);
-						} else if (type == PacketType.PING) {
-							long now = System.currentTimeMillis();
-							pingAttempt = 0;
-							onPingResponse((short)(now - (long)contents));
-						} else {
-							processUdpPacket(packetReceived);
-						}
-
+						processUdpPacket(type, contents);
+						
+						ois.close();
+						bais.close();
 					} catch (ClassNotFoundException | IOException e) {
 						ErrorManager.appendToLog(e.getMessage());
 					}
 				}
 			}
+			
+			@Override
+			public void interrupt(){
+				System.out.println("Closing?");
+				super.interrupt();
+				udpSocket.disconnect();
+				udpSocket.close();
+			}
 		};
 		udpListenToServer.start();
 	}
 
-	public synchronized void sendTcp(Packet packet) {
+	private void processUdpPacket(PacketType type, Serializable contents){
+		if(type == PacketType.CONNECTION){
+			sendUdp(new Packet(type, contents));
+		}else if(type == PacketType.PING){
+			long now = System.currentTimeMillis();
+			pingAttempt = 0;
+			onPingResponse((short)(now - (long)contents));
+		}else{
+			processUdpPacket(contents);
+		}
+	}
+	
+	private synchronized void sendTcp(Packet packet) {
 		Thread sendTcp = new Thread("Send (TCP)") {
 			public void run() {
 				try {
@@ -173,7 +188,7 @@ public abstract class JClient {
 		sendTcp.start();
 	}
 
-	public synchronized void sendUdp(Packet packet) {
+	private synchronized void sendUdp(Packet packet) {
 		Thread sendUdp = new Thread("Send (UDP)") {
 			public void run() {
 				try {
@@ -188,7 +203,15 @@ public abstract class JClient {
 		sendUdp.start();
 	}
 
-	public boolean completeHandshake() throws IOException {
+	public void sendTcp(Serializable data){
+		sendTcp(new Packet(PacketType.DATA, data));
+	}
+	
+	public void sendUdp(Serializable data){
+		sendUdp(new Packet(PacketType.DATA, data));
+	}
+	
+	private boolean completeHandshake() throws IOException {
 		boolean success = false;
 		String errorMessage = "";
 		Serializable content;
@@ -273,7 +296,6 @@ public abstract class JClient {
 
 				if (!reconnected) {
 					onReconnectFailed();
-					close();
 				} else {
 					onReconnectSucceeded();
 					startClient();
@@ -292,9 +314,8 @@ public abstract class JClient {
 		Thread closeThread = new Thread("Close connection") {
 			public void run() {
 				try {
+					System.out.println("Trying");
 					synchronized (tcpSocket) {
-						pingRunning = false;
-
 						tcpListening = false;
 						oos.flush();
 						tcpSocket.shutdownOutput();
@@ -302,7 +323,8 @@ public abstract class JClient {
 						tcpSocket.close();
 
 						udpListening = false;
-						udpSocket.close();
+						udpListenToServer.interrupt();
+						
 					}
 				} catch (IOException e) {
 					ErrorManager.appendToLog(e.getMessage());

@@ -1,8 +1,8 @@
 package jgame.networking;
 
-public enum PacketType {
+enum PacketType {
 	HANDSHAKE,
-	CONNECTATTEMPT,
+	CONNECTION,
 	PING,
 	DATA
 }
