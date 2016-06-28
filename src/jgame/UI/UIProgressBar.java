@@ -1,11 +1,11 @@
 package jgame.UI;
 
 import java.awt.Color;
-import java.awt.Graphics;
+
+import jgame.graphics.JGraphics;
+import jgame.util.Vector2I;
 
 import org.w3c.dom.ranges.RangeException;
-
-import jgame.util.Vector2I;
 
 /**
  * The UIProgressBar class.
@@ -60,7 +60,7 @@ public class UIProgressBar extends UIComponent {
 	 * <br/>Has no effect if the progressbar is hidden. See {@link #show()} for more details.
 	 */
 	@Override
-	public void render(Graphics g) {
+	public void render(JGraphics g) {
 		if(show){
 			int drawProgress = (int)(width * progress);
 			g.setColor(backgroundColor);

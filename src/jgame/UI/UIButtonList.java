@@ -1,8 +1,8 @@
 package jgame.UI;
 
-import java.awt.Graphics;
 import java.util.ArrayList;
 
+import jgame.graphics.JGraphics;
 import jgame.util.Vector2I;
 
 //TODO keyboard highlights vs mouse highlights
@@ -44,7 +44,7 @@ public class UIButtonList extends UIComponent{
 	}
 
 	@Override
-	public void render(Graphics g) {
+	public void render(JGraphics g) {
 		for(UIButton button : buttonList){
 			button.render(g);
 		}

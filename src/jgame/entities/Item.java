@@ -1,6 +1,6 @@
 package jgame.entities;
 
-import java.awt.Graphics;
+import jgame.graphics.JGraphics;
 
 public class Item extends Entity{
 
@@ -18,7 +18,7 @@ public class Item extends Entity{
 	}
 
 	@Override
-	public void render(Graphics g) {
+	public void render(JGraphics g) {
 	}
 
 	@Override

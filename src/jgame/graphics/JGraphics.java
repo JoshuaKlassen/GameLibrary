@@ -1,10 +1,17 @@
 package jgame.graphics;
 
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Rectangle;
+import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
+import java.text.AttributedCharacterIterator;
 
 public class JGraphics{
 
@@ -12,10 +19,6 @@ public class JGraphics{
 		
 	public JGraphics(Graphics graphics){
 		this.graphics = graphics;
-	}
-	
-	public void setColor(Color c){
-		graphics.setColor(c);
 	}
 	
 	/**
@@ -99,4 +102,108 @@ public class JGraphics{
 		}
 		return true;
 	}
+
+	
+
+	public void translate(int x, int y) {
+		graphics.translate(x, y);
+	}
+	
+
+	public Color getColor() {
+		return graphics.getColor();
+	}
+	
+	public void setColor(Color c){
+		graphics.setColor(c);
+	}
+	
+
+
+
+	public Font getFont() {
+		return graphics.getFont();
+	}
+	
+
+	public void setFont(Font font) {
+		graphics.setFont(font);
+	}
+	
+
+	public FontMetrics getFontMetrics(Font font) {
+		return graphics.getFontMetrics(font);
+	}
+	
+
+
+
+
+
+
+	public void copyArea(int x, int y, int width, int height, int dx, int dy) {
+		graphics.copyArea(x, y, width, height, dx, dy);
+	}
+	
+	public void drawRect(int x, int y, int width, int height){
+		graphics.drawRect(x, y, width, height);
+	}
+	
+	public void fillRect(int x, int y, int width, int height){
+		graphics.fillRect(x, y, width, height);
+	}
+	
+
+
+
+	public void clearRect(int x, int y, int width, int height) {
+		graphics.clearRect(x, y, width, height);
+	}
+	
+
+	
+
+	
+
+	
+
+
+
+
+
+
+
+	public void drawString(String str, int x, int y) {
+		graphics.drawString(str, x, y);
+	}
+	
+
+
+	public boolean drawSprite(Sprite sprite, int x, int y) {
+		return drawImage(sprite.getImage(), x, y);
+	}
+	
+
+	public boolean drawSprite(Sprite sprite, int x, int y, int width, int height) {
+		return drawImage(sprite.getImage(), x, y, width, height);
+	}
+	
+	public boolean drawImage(BufferedImage image, int x, int y){
+		return graphics.drawImage(image, x, y, null);
+	}
+	
+	public boolean drawImage(BufferedImage image, int x, int y, int width, int height){
+		return graphics.drawImage(image, x, y, width, height, null);
+	}
+	
+
+
+
+
+
+	public void dispose() {
+		graphics.dispose();
+	}
+	
+	public Graphics getInstance() { return graphics; }
 }

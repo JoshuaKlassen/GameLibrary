@@ -1,11 +1,11 @@
 package jgame.UI;
 
-import java.awt.Graphics;
 import java.util.ArrayList;
 
 import jgame.game.InputHandler;
 import jgame.game.InputKey;
 import jgame.graphics.Drawable;
+import jgame.graphics.JGraphics;
 import jgame.util.Vector2I;
 
 //TODO redesign
@@ -99,7 +99,7 @@ public class UIButton extends UIComponent{
 	}
 
 	@Override
-	public void render(Graphics g) {
+	public void render(JGraphics g) {
 		if(currentState != null)
 			currentState.render(g);
 	}

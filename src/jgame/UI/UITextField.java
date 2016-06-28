@@ -1,12 +1,12 @@
 package jgame.UI;
 
 import java.awt.Color;
-import java.awt.Graphics;
-
-import com.sun.glass.events.KeyEvent;
 
 import jgame.game.InputHandler;
+import jgame.graphics.JGraphics;
 import jgame.util.Vector2I;
+
+import com.sun.glass.events.KeyEvent;
 
 public class UITextField extends UIComponent{
 
@@ -69,7 +69,7 @@ public class UITextField extends UIComponent{
 	}
 	
 	@Override
-	public void render(Graphics g) {
+	public void render(JGraphics g) {
 		userTextLabel.render(g);
 		
 	}

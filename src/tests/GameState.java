@@ -9,6 +9,7 @@ import jgame.game.InputHandler;
 import jgame.game.InputKey;
 import jgame.game.State;
 import jgame.graphics.Drawable;
+import jgame.graphics.JGraphics;
 import jgame.util.Delay;
 import jgame.util.Utility;
 import jgame.util.Vector2I;
@@ -59,7 +60,7 @@ public class GameState extends State {
 		delay.start();
 		
 		drawItem = new Drawable(){
-			public void render(Graphics g){
+			public void render(JGraphics g){
 				g.setColor(Color.white);
 				g.drawString("Drawable item", 300, 150);
 			}
@@ -69,7 +70,7 @@ public class GameState extends State {
 	}
 
 	@Override
-	public void render(Graphics g) {
+	public void render(JGraphics g) {
 		g.setColor(Color.white);
 		g.drawString(getGame().getCurrentFramesPerSecond() + ":" + getGame().getCurrentUpdatesPerSecond() + ":" + InputHandler.getMousePosition(), 10, 30);
 		g.setColor(Color.green);

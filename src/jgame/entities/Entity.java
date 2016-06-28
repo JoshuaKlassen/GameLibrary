@@ -1,8 +1,7 @@
 package jgame.entities;
 
-import java.awt.Graphics;
-
 import jgame.graphics.Drawable;
+import jgame.graphics.JGraphics;
 import jgame.util.JSerializable;
 import jgame.util.Vector2F;
 
@@ -14,6 +13,6 @@ public abstract class Entity extends JSerializable implements Drawable{
 
 	public abstract void update();
 	
-	public abstract void render(Graphics g);
+	public abstract void render(JGraphics g);
 	
 }

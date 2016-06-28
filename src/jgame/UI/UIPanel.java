@@ -1,9 +1,9 @@
 package jgame.UI;
 
 import java.awt.Color;
-import java.awt.Graphics;
 import java.util.ArrayList;
 
+import jgame.graphics.JGraphics;
 import jgame.util.Vector2I;
 
 /**
@@ -113,7 +113,7 @@ public class UIPanel extends UIComponent{
 	 * <br/>Will have no effect if the panel is hidden. See {@link #show()} for more details.
 	 */
 	@Override
-	public void render(Graphics g) {
+	public void render(JGraphics g) {
 		if(show){
 			g.setColor(backgroundColor);
 			g.fillRect(position.x, position.y, width, height);

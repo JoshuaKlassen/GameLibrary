@@ -3,10 +3,10 @@ package jgame.UI;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 
+import jgame.graphics.JGraphics;
 import jgame.util.Vector2I;
 
 /**
@@ -109,12 +109,12 @@ public class UILabel extends UIComponent{
 	 * <br/>Will have no effect the the label is hidden. See {@link #show()} for more details.
 	 */
 	@Override
-	public void render(Graphics g) {
+	public void render(JGraphics g) {
 		if(show){
 			
 			//if(width == 0 || height == 0){
-				FontMetrics fm = ((Graphics2D)(g)).getFontMetrics(font);
-				Rectangle2D bounds = fm.getStringBounds(text, g);
+				FontMetrics fm = g.getFontMetrics(font);
+				Rectangle2D bounds = fm.getStringBounds(text, g.getInstance());
 				setWidth((int)bounds.getWidth());
 				setHeight(fm.getAscent() - fm.getDescent());
 			//}

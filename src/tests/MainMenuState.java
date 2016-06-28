@@ -13,6 +13,7 @@ import jgame.game.InputHandler;
 import jgame.game.InputKey;
 import jgame.game.State;
 import jgame.graphics.Drawable;
+import jgame.graphics.JGraphics;
 import jgame.util.Vector2I;
 
 public class MainMenuState extends State {
@@ -53,7 +54,7 @@ public class MainMenuState extends State {
 			name.setColor(Color.blue);
 			name.setFont(new Font(name.getFont().getFontName(), name.getFont().getStyle(), 9));
 			Drawable normal = new Drawable(){
-				public void render(Graphics g){
+				public void render(JGraphics g){
 					g.setColor(buttonBackground);
 					g.fillRect(b.getPosition().x, b.getPosition().y, b.getWidth(), b.getHeight());
 					name.render(g);
@@ -63,7 +64,7 @@ public class MainMenuState extends State {
 			
 			int highlightSize = 5;
 			Drawable highlighted = new Drawable(){
-				public void render(Graphics g){
+				public void render(JGraphics g){
 					g.setColor(buttonBackground);
 					g.fillRect(b.getPosition().x-highlightSize, b.getPosition().y-highlightSize, b.getWidth()+highlightSize*2, b.getHeight()+highlightSize*2);
 					name.render(g);
@@ -73,7 +74,7 @@ public class MainMenuState extends State {
 			
 			int pressedSize = 5;
 			Drawable pressed = new Drawable(){
-				public void render(Graphics g){
+				public void render(JGraphics g){
 					g.setColor(buttonBackground);
 					g.fillRect(b.getPosition().x+pressedSize, b.getPosition().y+pressedSize, b.getWidth()-pressedSize*2, b.getHeight()-pressedSize*2);
 					name.render(g);
@@ -119,7 +120,7 @@ public class MainMenuState extends State {
 	}
 
 	@Override
-	public void render(Graphics g) {
+	public void render(JGraphics g) {
 		gameTitle.render(g);
 		
 		

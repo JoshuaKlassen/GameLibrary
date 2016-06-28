@@ -1,8 +1,7 @@
 package jgame.UI;
 
-import java.awt.Graphics;
-
 import jgame.graphics.Drawable;
+import jgame.graphics.JGraphics;
 import jgame.util.Vector2I;
 
 /**
@@ -63,7 +62,7 @@ public abstract class UIComponent implements Drawable{
 	 * <br/>Renders the UIComponent to the screen.
 	 * @param g graphics
 	 */
-	public abstract void render(Graphics g);
+	public abstract void render(JGraphics g);
 	
 	/**
 	 * Returns a {@link Vector2I} representing the position

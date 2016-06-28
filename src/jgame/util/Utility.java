@@ -1,5 +1,6 @@
 package jgame.util;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -16,6 +17,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
+
+import jgame.entities.BitMask;
 
 //TODO Document
 //TODO Serializables
@@ -58,6 +61,19 @@ public final class Utility {
 
 	}
 
+	public static int[][] getSameColoredPixels(BufferedImage image, int rgb){
+		int[][] result = new int[image.getWidth()][image.getHeight()];
+		
+		for(int i = 0; i < result.length; i ++){
+			for(int j = 0; j < result[0].length; j ++){
+				if(image.getRGB(i, j) == rgb){
+					result[i][j] = 1;
+				} else result[i][j] = 0;
+			}
+		}
+		return result;
+	}
+	
 	public static String[] readFromFile(String filePath){
 		ArrayList<String> result = new ArrayList<String>();
 		try {

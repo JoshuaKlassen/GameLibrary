@@ -21,6 +21,7 @@ import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import jgame.graphics.JGraphics;
 import jgame.util.OS;
 import jgame.util.Time;
 import jgame.util.Utility;
@@ -180,18 +181,20 @@ public abstract class JGame extends Canvas implements Runnable{
 		
 		((Graphics2D)g).scale(scaleWidth, scaleHeight);
 		
-		render(g);
+		JGraphics jg = new JGraphics(g);
+		
+		render(jg);
 		
 		if(screenshotInProgress){
 			screenCapture = new BufferedImage(frame.getWidth(), frame.getHeight(), BufferedImage.TYPE_INT_RGB);
 			Graphics screenCaptureGraphics = screenCapture.getGraphics();
 			((Graphics2D)screenCaptureGraphics).scale(scaleWidth, scaleHeight);
-			render(screenCaptureGraphics);
+			render(new JGraphics(screenCaptureGraphics));
 			saveScreenshot();
 			screenshotInProgress = false;
 		}
 		
-		g.dispose();
+		jg.dispose();
 		bufferStrategy.show();
 		
 	}
@@ -201,7 +204,7 @@ public abstract class JGame extends Canvas implements Runnable{
 	 * Uses g to render to the screen.
 	 * @param g
 	 */
-	public void render(Graphics g){
+	public void render(JGraphics g){
 		if(currentState != null){
 			currentState.render(g);
 		}

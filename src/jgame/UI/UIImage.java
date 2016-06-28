@@ -1,8 +1,8 @@
 package jgame.UI;
 
-import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
+import jgame.graphics.JGraphics;
 import jgame.util.Vector2I;
 
 public class UIImage extends UIComponent{
@@ -25,9 +25,9 @@ public class UIImage extends UIComponent{
 	}
 
 	@Override
-	public void render(Graphics g) {
+	public void render(JGraphics g) {
 		if(show){
-			g.drawImage(image, position.x, position.y, width, height, null);
+			g.drawImage(image, position.x, position.y, width, height);
 		}
 	}
 	
