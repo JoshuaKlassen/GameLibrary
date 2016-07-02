@@ -3,7 +3,7 @@ package jgame.game;
 import java.awt.event.MouseWheelEvent;
 import java.util.ArrayList;
 
-import jgame.util.Vector2I;
+import jgame.util.Vector2;
 
 /*
  * This class is a wrapper for the InputManager class.
@@ -91,12 +91,12 @@ public final class InputHandler{
 	 * Returns the mouse position on the JGame screen as a {@link jgame.util.Vector2I}.
 	 * @return the mouse position.
 	 */
-	public static Vector2I getMousePosition(){
+	public static Vector2 getMousePosition(){
 		return inputManager.getMousePosition();
 	}
 	
-	public static Vector2I getScaledMousePosition(){
-		Vector2I result = null;
+	public static Vector2 getScaledMousePosition(){
+		Vector2 result = null;
 		if(game != null){
 			result = game.getScaledMousePosition();
 		}

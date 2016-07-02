@@ -1,6 +1,6 @@
 package jgame.graphics;
 
-public interface Drawable {
+public interface IRenderable {
 
 	void render(JGraphics g);
 	

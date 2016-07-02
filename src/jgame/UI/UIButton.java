@@ -4,18 +4,18 @@ import java.util.ArrayList;
 
 import jgame.game.InputHandler;
 import jgame.game.InputKey;
-import jgame.graphics.Drawable;
+import jgame.graphics.IRenderable;
 import jgame.graphics.JGraphics;
-import jgame.util.Vector2I;
+import jgame.util.Vector2;
 
 //TODO redesign
 //Not to happy with this :/
 public class UIButton extends UIComponent{
 
-	private Drawable normalState;	//could be a text label or an image
-	private Drawable highlightedState;
-	private Drawable pressedState;
-	private Drawable currentState;
+	private IRenderable normalState;	//could be a text label or an image
+	private IRenderable highlightedState;
+	private IRenderable pressedState;
+	private IRenderable currentState;
 	private ArrayList <InputKey> pressKeys;
 	
 	private ButtonAction action;
@@ -24,12 +24,12 @@ public class UIButton extends UIComponent{
 	private boolean isPressed;
 	private boolean mouseEnable;
 	
-	public UIButton(Vector2I position) {
+	public UIButton(Vector2 position) {
 		super(position);
 		init();
 	}
 	
-	public UIButton(Vector2I position, int width, int height){
+	public UIButton(Vector2 position, int width, int height){
 		super(position, width, height);
 		init();
 	}
@@ -50,15 +50,15 @@ public class UIButton extends UIComponent{
 		return pressKeys;
 	}
 	
-	public void setNormalState(Drawable state){
+	public void setNormalState(IRenderable state){
 		normalState = state;
 	}
 	
-	public void setHighlightedState(Drawable state){
+	public void setHighlightedState(IRenderable state){
 		highlightedState = state;
 	}
 	
-	public void setPressedState(Drawable state){
+	public void setPressedState(IRenderable state){
 		pressedState = state;
 	}
 	
@@ -104,7 +104,7 @@ public class UIButton extends UIComponent{
 			currentState.render(g);
 	}
 	
-	public boolean contains(Vector2I pos){
+	public boolean contains(Vector2 pos){
 		return (pos.x >= position.x) && (pos.x <= position.x + width)
 				&& (pos.y >= position.y) && (pos.y <= position.y + height);
 	}
@@ -152,7 +152,7 @@ public class UIButton extends UIComponent{
 		return isPressed;
 	}
 	
-	public Drawable getCurrentState(){
+	public IRenderable getCurrentState(){
 		return currentState;
 	}
 	

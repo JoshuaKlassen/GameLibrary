@@ -5,7 +5,7 @@ import java.awt.Color;
 import jgame.graphics.Animation;
 import jgame.graphics.JGraphics;
 import jgame.graphics.Sprite;
-import jgame.util.Vector2F;
+import jgame.util.Vector2;
 
 public class Particle extends Entity{
 	
@@ -23,7 +23,7 @@ public class Particle extends Entity{
 	
 	private Animation animation;
 	
-	public Particle(Vector2F position, float lifespan, Vector2F velocity, Color color, int size){
+	public Particle(Vector2 position, float lifespan, Vector2 velocity, Color color, int size){
 		this.lifespan = lifespan;
 		this.position = position;
 		this.velocity = velocity;
@@ -31,14 +31,14 @@ public class Particle extends Entity{
 		this.size = size;
 	}
 	
-	public Particle(float lifespan, Vector2F position, Vector2F velocity, Sprite sprite){
+	public Particle(float lifespan, Vector2 position, Vector2 velocity, Sprite sprite){
 		this.lifespan = lifespan;
 		this.position = position;
 		this.velocity = velocity;
 		this.sprite = sprite;
 	}
 	
-	public Particle(float lifespan, Vector2F position, Vector2F velocity, Animation animation){
+	public Particle(float lifespan, Vector2 position, Vector2 velocity, Animation animation){
 		this.lifespan = lifespan;
 		this.position = position;
 		this.velocity = velocity;
@@ -48,7 +48,7 @@ public class Particle extends Entity{
 	@Override
 	public void update() {
 		if(isAlive()){
-			position = Vector2F.add(position, velocity);
+			position = Vector2.add(position, velocity);
 			lifespan -= 0.1f;
 			if(animation != null){
 				animation.update();

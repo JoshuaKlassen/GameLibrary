@@ -1,25 +1,25 @@
 package jgame.entities;
 
-import jgame.graphics.Drawable;
+import jgame.graphics.IRenderable;
 import jgame.util.JSerializable;
-import jgame.util.Vector2F;
+import jgame.util.Vector2;
 
-public abstract class Entity extends JSerializable implements Drawable, Updatable{
+public abstract class Entity extends JSerializable implements IRenderable, IUpdatable{
 
 	private static final long serialVersionUID = 1478579988881050203L;
 
-	protected Vector2F position = new Vector2F();
+	protected Vector2 position = new Vector2();
 	
-	protected Vector2F velocity = new Vector2F();
+	protected Vector2 velocity = new Vector2();
 	
 	public abstract boolean isAlive();
 	
-	public Vector2F position() { return position; }
+	public Vector2 position() { return position; }
 	
-	public void setPosition(Vector2F pos) { position = pos; }
+	public void setPosition(Vector2 pos) { position = pos; }
 	
-	public Vector2F velocity() { return velocity; }
+	public Vector2 velocity() { return velocity; }
 	
-	public void setVelocity(Vector2F vel) { velocity = vel; }
+	public void setVelocity(Vector2 vel) { velocity = vel; }
 	
 }

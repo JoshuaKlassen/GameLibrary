@@ -1,9 +1,9 @@
 package jgame.UI;
 
-import jgame.entities.Updatable;
-import jgame.graphics.Drawable;
+import jgame.entities.IUpdatable;
+import jgame.graphics.IRenderable;
 import jgame.graphics.JGraphics;
-import jgame.util.Vector2I;
+import jgame.util.Vector2;
 
 /**
  * The UIComponent abstract class.
@@ -14,10 +14,10 @@ import jgame.util.Vector2I;
  * <br/>Allows for the creation of custom UIComponents for the game to display.
  * @author Joshua Klassen
  */
-public abstract class UIComponent implements Drawable, Updatable{
+public abstract class UIComponent implements IRenderable, IUpdatable{
 
 	//the position
-	protected Vector2I position;
+	protected Vector2 position;
 	
 	//the dimensions
 	protected int width = 0;
@@ -31,7 +31,7 @@ public abstract class UIComponent implements Drawable, Updatable{
 	 * <br/>equal to the {@link Vector2I} given.
 	 * @param position
 	 */
-	public UIComponent(Vector2I position){
+	public UIComponent(Vector2 position){
 		this.position = position;
 	}
 	
@@ -42,7 +42,7 @@ public abstract class UIComponent implements Drawable, Updatable{
 	 * @param width
 	 * @param height
 	 */
-	public UIComponent(Vector2I position, int width, int height){
+	public UIComponent(Vector2 position, int width, int height){
 		this.position = position;
 		this.width = width;
 		this.height = height;
@@ -70,9 +70,9 @@ public abstract class UIComponent implements Drawable, Updatable{
 	 * <br/> of the UIComponent that called this method.
 	 * @return position.
 	 */
-	public Vector2I getPosition(){ return position; }
+	public Vector2 getPosition(){ return position; }
 	
-	public void setPosition(Vector2I pos){ this.position = pos; }
+	public void setPosition(Vector2 pos){ this.position = pos; }
 	
 	/**
 	 * Returns the width of the UIComponent that 
@@ -126,7 +126,7 @@ public abstract class UIComponent implements Drawable, Updatable{
 		else show();
 	}
 	
-	public boolean contains(Vector2I point){
+	public boolean contains(Vector2 point){
 		return (point.x >= position.x) && (point.x <= position.x + width)
 				&& (point.y >= position.y) && (point.y <= position.y + height);
 	}

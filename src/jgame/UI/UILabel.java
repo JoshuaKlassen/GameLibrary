@@ -6,7 +6,7 @@ import java.awt.FontMetrics;
 import java.awt.geom.Rectangle2D;
 
 import jgame.graphics.JGraphics;
-import jgame.util.Vector2I;
+import jgame.util.Vector2;
 
 /**
  * The UILabel class.
@@ -32,7 +32,7 @@ public class UILabel extends UIComponent{
 	 * <br/>and sets the text to be empty.
 	 * @param position
 	 */
-	public UILabel(Vector2I position){
+	public UILabel(Vector2 position){
 		super(position);
 	}
 	
@@ -43,7 +43,7 @@ public class UILabel extends UIComponent{
 	 * @param position
 	 * @param text
 	 */
-	public UILabel(Vector2I position, String text){
+	public UILabel(Vector2 position, String text){
 		super(position);
 		this.text = text;
 	}
@@ -56,7 +56,7 @@ public class UILabel extends UIComponent{
 	 * @param text
 	 * @param color
 	 */
-	public UILabel(Vector2I position, String text, Color color){
+	public UILabel(Vector2 position, String text, Color color){
 		super(position);
 		this.text = text;
 		this.color = color;
@@ -70,7 +70,7 @@ public class UILabel extends UIComponent{
 	 * @param text
 	 * @param font
 	 */
-	public UILabel(Vector2I position, String text, Font font){
+	public UILabel(Vector2 position, String text, Font font){
 		super(position);
 		this.text = text;
 		this.font = font;
@@ -85,7 +85,7 @@ public class UILabel extends UIComponent{
 	 * @param color
 	 * @param font
 	 */
-	public UILabel(Vector2I position, String text, Color color, Font font){
+	public UILabel(Vector2 position, String text, Color color, Font font){
 		super(position);
 		this.text = text;
 		this.color = color;
@@ -122,12 +122,12 @@ public class UILabel extends UIComponent{
 			//int textHeight = fm.getAscent();
 			g.setColor(color);
 			g.setFont(font);
-			g.drawString(text, position.x, position.y + height);
-			g.drawRect(position.x, position.y, width, height);
+			g.drawString(text, (int)position.x, (int)position.y + height);
+			g.drawRect(position, width, height);
 		}
 	}
 	
-	public boolean contains(Vector2I point){
+	public boolean contains(Vector2 point){
 		return (point.x >= position.x) && (point.x <= position.x + width)
 				&& (point.y >= position.y) && (point.y <= position.y + height);
 	}

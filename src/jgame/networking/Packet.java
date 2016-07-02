@@ -48,5 +48,4 @@ public class Packet implements Serializable{
 		return "Type: " + type.name() + " Contents: " + contents;
 	}
 	
-	
 }

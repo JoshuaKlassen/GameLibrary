@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
-import jgame.util.Vector2I;
+import jgame.util.Vector2;
 
 public class Bitmask {
 
@@ -35,7 +35,7 @@ public class Bitmask {
 		return result;
 	}
 	
-	public static Vector2I firstPointOfContact(Rectangle aR, Rectangle bR, Bitmask bA, Bitmask bB){
+	public static Vector2 firstPointOfContact(Rectangle aR, Rectangle bR, Bitmask bA, Bitmask bB){
 		Rectangle intersection = aR.intersection(bR);
 		
 		int minaX = intersection.x - aR.x;
@@ -57,7 +57,7 @@ public class Bitmask {
 //						System.out.print((bA.mask[i][j] + bB.mask[i2][j2]) + ", ");
 						if(bA.mask[i][j] + bB.mask[i2][j2] == 2){
 							//System.out.println("Collision:" + (aR.x + i) + ", " + (aR.y + j));
-							return new Vector2I(aR.y + j, aR.x + i);
+							return new Vector2(aR.y + j, aR.x + i);
 						}
 					}
 //					System.out.println();

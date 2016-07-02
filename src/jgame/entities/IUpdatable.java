@@ -1,5 +1,5 @@
 package jgame.entities;
 
-public interface Updatable {
+public interface IUpdatable {
 	void update();
 }

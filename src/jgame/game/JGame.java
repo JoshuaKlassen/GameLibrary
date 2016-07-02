@@ -25,7 +25,7 @@ import jgame.graphics.JGraphics;
 import jgame.util.OS;
 import jgame.util.Time;
 import jgame.util.Utility;
-import jgame.util.Vector2I;
+import jgame.util.Vector2;
 
 //TODO Document
 
@@ -314,9 +314,9 @@ public abstract class JGame extends Canvas implements Runnable{
 		this.requestFocus();
 	}
 	
-	public Vector2I getScaledMousePosition(){
-		Vector2I mousePosition = InputHandler.getMousePosition();
-		return new Vector2I((int)(mousePosition.x / scaleWidth), (int)(mousePosition.y / scaleHeight));
+	public Vector2 getScaledMousePosition(){
+		Vector2 mousePosition = InputHandler.getMousePosition();
+		return new Vector2((int)(mousePosition.x / scaleWidth), (int)(mousePosition.y / scaleHeight));
 	}
 	
 	/**

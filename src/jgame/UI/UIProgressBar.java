@@ -3,7 +3,7 @@ package jgame.UI;
 import java.awt.Color;
 
 import jgame.graphics.JGraphics;
-import jgame.util.Vector2I;
+import jgame.util.Vector2;
 
 import org.w3c.dom.ranges.RangeException;
 
@@ -29,7 +29,7 @@ public class UIProgressBar extends UIComponent {
 	 * <br/>equal to the {@link Vector2I} given.
 	 * @param position
 	 */
-	public UIProgressBar(Vector2I position) {
+	public UIProgressBar(Vector2 position) {
 		super(position);
 	}
 	
@@ -40,7 +40,7 @@ public class UIProgressBar extends UIComponent {
 	 * @param width
 	 * @param height
 	 */
-	public UIProgressBar(Vector2I position, int width, int height){
+	public UIProgressBar(Vector2 position, int width, int height){
 		super(position, width, height);
 	}
 
@@ -64,11 +64,11 @@ public class UIProgressBar extends UIComponent {
 		if(show){
 			int drawProgress = (int)(width * progress);
 			g.setColor(backgroundColor);
-			g.fillRect(position.x + drawProgress, position.y, width - drawProgress, height);
+			g.fillRect((int)position.x + drawProgress, (int)position.y, width - drawProgress, height);
 			g.setColor(foregroundColor);
-			g.fillRect(position.x, position.y, drawProgress, height);
+			g.fillRect(position, drawProgress, height);
 			g.setColor(outlineColor);
-			g.drawRect(position.x, position.y, width, height);
+			g.drawRect(position, width, height);
 		}
 	}
 

@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 
 import jgame.graphics.JGraphics;
-import jgame.util.Vector2I;
+import jgame.util.Vector2;
 
 /**
  * The UIPanel class.
@@ -26,7 +26,7 @@ public class UIPanel extends UIComponent{
 	 * <br/>equal to the {@link Vector2I} given.
 	 * @param position
 	 */
-	public UIPanel(Vector2I position){
+	public UIPanel(Vector2 position){
 		super(position);
 	}
 	
@@ -37,7 +37,7 @@ public class UIPanel extends UIComponent{
 	 * @param position
 	 * @param uiComponents
 	 */
-	public UIPanel(Vector2I position, UIComponent... uiComponents) {
+	public UIPanel(Vector2 position, UIComponent... uiComponents) {
 		super(position);
 		add(uiComponents);
 	}
@@ -49,7 +49,7 @@ public class UIPanel extends UIComponent{
 	 * @param width
 	 * @param height
 	 */
-	public UIPanel(Vector2I position, int width, int height){
+	public UIPanel(Vector2 position, int width, int height){
 		super(position, width, height);
 	}
 	
@@ -61,7 +61,7 @@ public class UIPanel extends UIComponent{
 	 * @param height
 	 * @param uiComponents
 	 */
-	public UIPanel(Vector2I position, int width, int height, UIComponent... uiComponents){
+	public UIPanel(Vector2 position, int width, int height, UIComponent... uiComponents){
 		super(position, width, height);
 		add(uiComponents);
 	}
@@ -116,14 +116,14 @@ public class UIPanel extends UIComponent{
 	public void render(JGraphics g) {
 		if(show){
 			g.setColor(backgroundColor);
-			g.fillRect(position.x, position.y, width, height);
+			g.fillRect(position, width, height);
 			for(UIComponent c : components) c.render(g);
 		}
 	}
 	
 	@Override
-	public void setPosition(Vector2I pos){
-		Vector2I originalPosition = position;
+	public void setPosition(Vector2 pos){
+		Vector2 originalPosition = position;
 		super.setPosition(pos);
 		for(UIComponent c : components){
 			c.getPosition().subtract(originalPosition);

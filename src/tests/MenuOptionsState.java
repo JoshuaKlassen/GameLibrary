@@ -10,13 +10,13 @@ import jgame.game.INPUT_KEY;
 import jgame.game.InputHandler;
 import jgame.game.InputKey;
 import jgame.game.State;
-import jgame.graphics.Drawable;
+import jgame.graphics.IRenderable;
 import jgame.graphics.JGraphics;
-import jgame.util.Vector2I;
+import jgame.util.Vector2;
 
 public class MenuOptionsState extends State{
 
-	private Vector2I gotoMenuButtonPosition;
+	private Vector2 gotoMenuButtonPosition;
 	private int gotoMenuButtonWidth = 50;
 	private int gotoMenuButtonHeight = 20;
 	private int gotoMenuButtonHighlight = 10;
@@ -32,46 +32,40 @@ public class MenuOptionsState extends State{
 	
 	private InputKey enterKey = new InputKey(INPUT_KEY.VK_ENTER);
 	
-	UILabel temp = new UILabel(new Vector2I(50, 10), "test");
+	UILabel temp = new UILabel(new Vector2(50, 10), "test");
 	
 	public MenuOptionsState(JGameTest game) {
 		super(game);
 		
 		InputHandler.add(escapeKey, leftClick, enterKey);
 
-		gotoMenuButtonPosition = new Vector2I(10, (int)(getGame().getHeight() / getGame().getScaleHeight()) - gotoMenuButtonHeight - 10);
+		gotoMenuButtonPosition = new Vector2(10, (int)(getGame().getHeight() / getGame().getScaleHeight()) - gotoMenuButtonHeight - 10);
 		gotoMenuButton = new UIButton(gotoMenuButtonPosition, gotoMenuButtonWidth, gotoMenuButtonHeight);
 		
-		UILabel gotoMenuButtonLabel = new UILabel(Vector2I.add(gotoMenuButtonPosition, new Vector2I(5, 5)), "Go back", Color.black);
+		UILabel gotoMenuButtonLabel = new UILabel(Vector2.add(gotoMenuButtonPosition, new Vector2(5, 5)), "Go back", Color.black);
 		
-		Drawable gotoMenuButtonNormalState = new Drawable(){
+		IRenderable gotoMenuButtonNormalState = new IRenderable(){
 			public void render(JGraphics g){
 				g.setColor(gotoMenuButtonColor);
-				g.fillRect(gotoMenuButton.getPosition().x, gotoMenuButton.getPosition().y, gotoMenuButton.getWidth(), gotoMenuButton.getHeight());
+				g.fillRect(gotoMenuButton.getPosition(), gotoMenuButton.getWidth(), gotoMenuButton.getHeight());
 				gotoMenuButtonLabel.render(g);
 			}
-			
-			public void update(){}
 		};
 		
-		Drawable gotoMenuButtonHighlightState = new Drawable(){
+		IRenderable gotoMenuButtonHighlightState = new IRenderable(){
 			public void render(JGraphics g){
 				g.setColor(gotoMenuButtonColor);
-				g.fillRect(gotoMenuButton.getPosition().x - gotoMenuButtonHighlight, gotoMenuButton.getPosition().y - gotoMenuButtonHighlight, gotoMenuButton.getWidth()+gotoMenuButtonHighlight*2, gotoMenuButton.getHeight()+gotoMenuButtonHighlight*2);
+				g.fillRect((int)gotoMenuButton.getPosition().x - gotoMenuButtonHighlight, (int)gotoMenuButton.getPosition().y - gotoMenuButtonHighlight, gotoMenuButton.getWidth()+gotoMenuButtonHighlight*2, gotoMenuButton.getHeight()+gotoMenuButtonHighlight*2);
 				gotoMenuButtonLabel.render(g);
 			}
-			
-			public void update(){}
 		};
 		
-		Drawable gotoMenuButtonPressedState = new Drawable(){
+		IRenderable gotoMenuButtonPressedState = new IRenderable(){
 			public void render(JGraphics g){
 				g.setColor(gotoMenuButtonColor);
-				g.fillRect(gotoMenuButton.getPosition().x, gotoMenuButton.getPosition().y, gotoMenuButton.getWidth()-gotoMenuButtonHighlight/2, gotoMenuButton.getHeight()-gotoMenuButtonHighlight/2);
+				g.fillRect(gotoMenuButton.getPosition(), gotoMenuButton.getWidth()-gotoMenuButtonHighlight/2, gotoMenuButton.getHeight()-gotoMenuButtonHighlight/2);
 				gotoMenuButtonLabel.render(g);
 			}
-			
-			public void update(){}
 		};
 		
 		ButtonAction gotoMenuButtonAction = new ButtonAction(){
@@ -89,7 +83,7 @@ public class MenuOptionsState extends State{
 		gotoMenuButton.trackMouse(true);
 		gotoMenuButton.addPressKeys(leftClick);
 		
-		textField = new UITextField(new Vector2I(10, 10), game.settings.getSetting("Player Name").getValue().toString());
+		textField = new UITextField(new Vector2(10, 10), game.settings.getSetting("Player Name").getValue().toString());
 		
 		
 	}

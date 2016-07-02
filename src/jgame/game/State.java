@@ -1,9 +1,9 @@
 package jgame.game;
 
-import jgame.entities.Updatable;
-import jgame.graphics.Drawable;
+import jgame.entities.IUpdatable;
+import jgame.graphics.IRenderable;
 
-public abstract class State implements Drawable, Updatable{
+public abstract class State implements IRenderable, IUpdatable{
 	
 	private JGame game;
 	

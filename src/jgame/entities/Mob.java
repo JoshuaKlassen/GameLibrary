@@ -1,16 +1,15 @@
 package jgame.entities;
 
-
 public abstract class Mob extends Entity{
 
-	private int maxHealth;
-	private int health;
-	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 4577615793133065570L;
 
+	private int maxHealth;
+	private int health;
+	
 	@Override
 	public boolean isAlive() { return health > 0; }
 

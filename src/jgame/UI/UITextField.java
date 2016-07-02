@@ -4,7 +4,7 @@ import java.awt.Color;
 
 import jgame.game.InputHandler;
 import jgame.graphics.JGraphics;
-import jgame.util.Vector2I;
+import jgame.util.Vector2;
 
 import com.sun.glass.events.KeyEvent;
 
@@ -18,14 +18,14 @@ public class UITextField extends UIComponent{
 	
 	private boolean hasFocus;
 	
-	public UITextField(Vector2I position, String defaultText) {
+	public UITextField(Vector2 position, String defaultText) {
 		super(position);
 		text = defaultText;
 		
 		init();
 	}
 	
-	public UITextField(Vector2I position, int width, int height, String defaultText) {
+	public UITextField(Vector2 position, int width, int height, String defaultText) {
 		super(position, width, height);
 		text = defaultText;
 		
@@ -56,7 +56,7 @@ public class UITextField extends UIComponent{
 		}
 	}
 	
-	public boolean contains(Vector2I point){
+	public boolean contains(Vector2 point){
 		return userTextLabel.contains(point);
 	}
 	

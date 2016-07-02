@@ -8,8 +8,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 
-import jgame.util.Vector2F;
-import jgame.util.Vector2I;
+import jgame.util.Vector2;
 
 public class JGraphics{
 
@@ -134,11 +133,7 @@ public class JGraphics{
 		graphics.drawRect(x, y, width, height);
 	}
 	
-	public void drawRect(Vector2I position, int width, int height){
-		drawRect(position.x, position.y, width, height);
-	}
-	
-	public void drawRect(Vector2F position, int width, int height){
+	public void drawRect(Vector2 position, int width, int height){
 		drawRect((int)position.x, (int)position.y, width, height);
 	}
 	
@@ -146,11 +141,7 @@ public class JGraphics{
 		graphics.fillRect(x, y, width, height);
 	}
 	
-	public void fillRect(Vector2I position, int width, int height){
-		fillRect(position.x, position.y, width, height);
-	}
-	
-	public void fillRect(Vector2F position, int width, int height){
+	public void fillRect(Vector2 position, int width, int height){
 		fillRect((int)position.x, (int)position.y, width, height);
 	}
 	
@@ -170,19 +161,11 @@ public class JGraphics{
 		return drawImage(sprite.getImage(), x, y, width, height);
 	}
 	
-	public boolean drawSprite(Sprite sprite, Vector2I position){
-		return drawSprite(sprite, position.x, position.y);
-	}
-	
-	public boolean drawSprite(Sprite sprite, Vector2I position, int width, int height){
-		return drawSprite(sprite, position.x, position.y, width, height);
-	}
-	
-	public boolean drawSprite(Sprite sprite, Vector2F position){
+	public boolean drawSprite(Sprite sprite, Vector2 position){
 		return drawSprite(sprite, (int)position.x, (int)position.y);
 	}
 	
-	public boolean drawSprite(Sprite sprite, Vector2F position, int width, int height){
+	public boolean drawSprite(Sprite sprite, Vector2 position, int width, int height){
 		return drawSprite(sprite, (int)position.x, (int)position.y, width, height);
 	}
 	
@@ -192,6 +175,14 @@ public class JGraphics{
 	
 	public boolean drawImage(BufferedImage image, int x, int y, int width, int height){
 		return graphics.drawImage(image, x, y, width, height, null);
+	}
+	
+	public boolean drawImage(BufferedImage image, Vector2 position){
+		return drawImage(image, (int)position.x, (int)position.y);
+	}
+	
+	public boolean drawImage(BufferedImage image, Vector2 position, int width, int height){
+		return drawImage(image, (int)position.x, (int)position.y, width, height);
 	}
 	
 	public void dispose() {

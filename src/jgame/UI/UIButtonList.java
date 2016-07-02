@@ -3,19 +3,19 @@ package jgame.UI;
 import java.util.ArrayList;
 
 import jgame.graphics.JGraphics;
-import jgame.util.Vector2I;
+import jgame.util.Vector2;
 
 //TODO keyboard highlights vs mouse highlights
 public class UIButtonList extends UIComponent{
 
 	private ArrayList<UIButton> buttonList = new ArrayList<UIButton>();
 	
-	public UIButtonList(Vector2I position) {
+	public UIButtonList(Vector2 position) {
 		super(position);
 		// TODO Auto-generated constructor stub
 	}
 	
-	public UIButtonList(Vector2I position, int width, int height) {
+	public UIButtonList(Vector2 position, int width, int height) {
 		super(position, width, height);
 		// TODO Auto-generated constructor stub
 	}

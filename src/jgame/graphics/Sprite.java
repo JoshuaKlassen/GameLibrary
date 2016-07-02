@@ -16,8 +16,18 @@ public class Sprite{
 		this.image = image;
 	}
 	
-	public BufferedImage getImage(){
-		return image;
+
+	public void setCollisionArea(ICollisionArea area) { collisionArea = area; }
+	
+	public ICollisionArea getCollisionArea(){
+		return collisionArea;
 	}
 	
+	public void setHurtArea(ICollisionArea area) { hurtArea = area; }
+	
+	public void setHitArea(ICollisionArea area) { hitArea = area; }
+	
+	public BufferedImage getImage(){
+		return image;
+	}	
 }

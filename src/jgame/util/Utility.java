@@ -1,7 +1,5 @@
 package jgame.util;
 
-import java.awt.Color;
-import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -15,10 +13,6 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Serializable;
 import java.util.ArrayList;
-
-import javax.imageio.ImageIO;
-
-import jgame.entities.BitMask;
 
 //TODO Document
 //TODO Serializables
@@ -50,7 +44,6 @@ public final class Utility {
 	}
 	
 	//TODO Document
-	
 	
 	public static String[] readFromFile(String filePath){
 		ArrayList<String> result = new ArrayList<String>();

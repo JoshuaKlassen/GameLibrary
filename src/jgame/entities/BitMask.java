@@ -2,7 +2,7 @@ package jgame.entities;
 
 import java.awt.Graphics;
 
-import jgame.util.Vector2F;
+import jgame.util.Vector2;
 
 public class BitMask implements ICollisionArea{
 
@@ -15,7 +15,7 @@ public class BitMask implements ICollisionArea{
 	}
 	
 	@Override
-	public boolean collision(Vector2F point) {
+	public boolean collision(Vector2 point) {
 		return false;
 	}
 
@@ -23,7 +23,11 @@ public class BitMask implements ICollisionArea{
 	public boolean collision(ICollisionArea area) {
 		return false;
 	}
-
+	
+	public boolean collision(BitMask area){
+		return false;
+	}
+	
 	@Override
 	public void toggleShow() { show = !show; }
 
@@ -35,7 +39,7 @@ public class BitMask implements ICollisionArea{
 	}
 
 	@Override
-	public void move(Vector2F position) {
+	public void move(Vector2 position) {
 		
 	}
 

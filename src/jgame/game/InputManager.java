@@ -9,7 +9,7 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
 
-import jgame.util.Vector2I;
+import jgame.util.Vector2;
 
 /**
  * The InputManager class.
@@ -27,7 +27,7 @@ final class InputManager extends KeyAdapter implements MouseListener, MouseMotio
 	private ArrayList<InputKey> inputKeys = new ArrayList<InputKey>();
 	
 	//the mouse position
-	private Vector2I mousePosition = new Vector2I(0, 0);
+	private Vector2 mousePosition = new Vector2(0, 0);
 	
 	//the mouse wheel rotation
 	private int mouseWheelRotation = 0;
@@ -161,7 +161,7 @@ final class InputManager extends KeyAdapter implements MouseListener, MouseMotio
 	 * Returns the mouse position on the JGame screen as a {@link jgame.util.Vector2I}.
 	 * @return the mouse position.
 	 */
-	protected Vector2I getMousePosition() { return mousePosition; }
+	protected Vector2 getMousePosition() { return mousePosition; }
 	
 	/**
 	 * This method is called when the mouse is clicked,

@@ -10,13 +10,14 @@ import jgame.UI.UIButton;
 import jgame.UI.UIButtonList;
 import jgame.UI.UILabel;
 import jgame.entities.Entity;
+import jgame.entities.ParticleFactory;
 import jgame.game.INPUT_KEY;
 import jgame.game.InputHandler;
 import jgame.game.InputKey;
 import jgame.game.State;
-import jgame.graphics.Drawable;
+import jgame.graphics.IRenderable;
 import jgame.graphics.JGraphics;
-import jgame.util.Vector2I;
+import jgame.util.Vector2;
 
 public class MainMenuState extends State {
 
@@ -44,41 +45,43 @@ public class MainMenuState extends State {
 	public MainMenuState(JGameTest game) {
 		super(game);
 		
+		game.hideCursor();
+		
 		int centreScreen = (int)(getGame().getWidth()/2 / getGame().getScaleWidth());
 		
-		gameTitle = new UILabel(new Vector2I(centreScreen - 40, 70), "Sandbox", Color.RED);
+		gameTitle = new UILabel(new Vector2(centreScreen - 40, 70), "Sandbox", Color.RED);
 		
 		InputHandler.add(up, down, leftClick, enter);
-		menuButtons = new UIButtonList(new Vector2I(centreScreen - BUTTON_WIDTH/2 - 10, BUTTON_LIST_HEIGHT));
+		menuButtons = new UIButtonList(new Vector2(centreScreen - BUTTON_WIDTH/2 - 10, BUTTON_LIST_HEIGHT));
 		
 		for(int i = 0; i < NUMBER_OF_BUTTONS; i ++){
 			int height = BUTTON_LIST_HEIGHT + (i*15);
-			UIButton b = new UIButton(new Vector2I(centreScreen - BUTTON_WIDTH/2 - 10, height), BUTTON_WIDTH, BUTTON_HEIGHT/4);
+			UIButton b = new UIButton(new Vector2(centreScreen - BUTTON_WIDTH/2 - 10, height), BUTTON_WIDTH, BUTTON_HEIGHT/4);
 			UILabel name = new UILabel(b.getPosition().clone(), menuTitles[i]);
 			name.setColor(Color.blue);
 			name.setFont(new Font(name.getFont().getFontName(), name.getFont().getStyle(), 9));
-			Drawable normal = new Drawable(){
+			IRenderable normal = new IRenderable(){
 				public void render(JGraphics g){
 					g.setColor(buttonBackground);
-					g.fillRect(b.getPosition().x, b.getPosition().y, b.getWidth(), b.getHeight());
+					g.fillRect(b.getPosition(), b.getWidth(), b.getHeight());
 					name.render(g);
 				}
 			};
 			
 			int highlightSize = 5;
-			Drawable highlighted = new Drawable(){
+			IRenderable highlighted = new IRenderable(){
 				public void render(JGraphics g){
 					g.setColor(buttonBackground);
-					g.fillRect(b.getPosition().x-highlightSize, b.getPosition().y-highlightSize, b.getWidth()+highlightSize*2, b.getHeight()+highlightSize*2);
+					g.fillRect((int)b.getPosition().x-highlightSize, (int)b.getPosition().y-highlightSize, b.getWidth()+highlightSize*2, b.getHeight()+highlightSize*2);
 					name.render(g);
 				}
 			};
 			
 			int pressedSize = 5;
-			Drawable pressed = new Drawable(){
+			IRenderable pressed = new IRenderable(){
 				public void render(JGraphics g){
 					g.setColor(buttonBackground);
-					g.fillRect(b.getPosition().x+pressedSize, b.getPosition().y+pressedSize, b.getWidth()-pressedSize*2, b.getHeight()-pressedSize*2);
+					g.fillRect((int)b.getPosition().x+pressedSize, (int)b.getPosition().y+pressedSize, b.getWidth()-pressedSize*2, b.getHeight()-pressedSize*2);
 					name.render(g);
 				}
 			};
@@ -138,8 +141,9 @@ public class MainMenuState extends State {
 		menuButtons.render(g);
 		
 		g.setColor(Color.white);
-		g.drawString(buttonListPosition + "", 10, 10);
-		g.fillRect(new Vector2I(50, 50), 3, 3);
+		g.drawString(getGame().getCurrentFramesPerSecond() + ":" + getGame().getCurrentUpdatesPerSecond() + ":" + InputHandler.getMousePosition(), 10, 30);
+		g.fillRect(InputHandler.getScaledMousePosition(), 1, 1);
+		g.fillRect(new Vector2(50, 50), 3, 3);
 		
 		for(int i = 0; i < entities.size(); i ++){
 			entities.get(i).render(g);
@@ -151,6 +155,8 @@ public class MainMenuState extends State {
 	public void update() {
 		gameTitle.update();
 		
+		entities.addAll(ParticleFactory.generateParticles(InputHandler.getScaledMousePosition(), 1, 2, 1, 2, 0.5f, 1f, 1, Color.RED));
+
 		for(int i = 0; i < entities.size(); i ++){
 			Entity e = entities.get(i);
 			e.update();

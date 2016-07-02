@@ -9,7 +9,7 @@ import jgame.game.InputKey;
 import jgame.game.JGame;
 import jgame.game.State;
 import jgame.graphics.JGraphics;
-import jgame.util.Vector2F;
+import jgame.util.Vector2;
 
 public class TrainingState extends State{
 
@@ -23,7 +23,7 @@ public class TrainingState extends State{
 	public TrainingState(JGame game) {
 		super(game);
 		InputHandler.add(up, down, left, right);
-		myMob = new MyMob(new Vector2F(10, 10));
+		myMob = new MyMob(new Vector2(10, 10));
 	}
 
 	@Override
@@ -65,7 +65,7 @@ class MyMob extends Mob {
 	 */
 	private static final long serialVersionUID = 5656241623369186092L;
 
-	public MyMob(Vector2F position){
+	public MyMob(Vector2 position){
 		this.position = position;
 		setMaxHealth(50);
 	}
@@ -78,7 +78,7 @@ class MyMob extends Mob {
 
 	@Override
 	public void update() {
-		position = Vector2F.add(position, velocity);
+		position = Vector2.add(position, velocity);
 	}
 
 	@Override
