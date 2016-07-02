@@ -30,4 +30,9 @@ public class Item extends Entity{
 		return name;
 	}
 
+	@Override
+	public boolean isAlive() {
+		return false;
+	}
+
 }

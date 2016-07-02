@@ -42,7 +42,7 @@ public class UITextField extends UIComponent{
 	public void update() {
 		if(hasFocus){
 			int key = InputHandler.getKeyTyped();
-			if(key > 0){
+			if(key > 0 && key != KeyEvent.VK_ENTER){
 				if(key != KeyEvent.VK_BACKSPACE){
 					text += (char)key;
 					

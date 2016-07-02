@@ -1,7 +1,6 @@
 package tests;
 
 import java.awt.Color;
-import java.awt.Graphics;
 
 import jgame.UI.ButtonAction;
 import jgame.UI.UIButton;

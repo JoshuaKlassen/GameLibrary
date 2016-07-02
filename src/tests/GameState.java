@@ -1,7 +1,6 @@
 package tests;
 
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Rectangle;
 
 import jgame.game.INPUT_KEY;
@@ -9,6 +8,7 @@ import jgame.game.InputHandler;
 import jgame.game.InputKey;
 import jgame.game.State;
 import jgame.graphics.Drawable;
+import jgame.graphics.GraphicsUtility;
 import jgame.graphics.JGraphics;
 import jgame.util.Delay;
 import jgame.util.Utility;
@@ -28,7 +28,7 @@ public class GameState extends State {
 	private int[][] bA = new int[rec1.width][rec1.height];
 	private int[][] bB = new int[rec2.width][rec2.height];
 	
-	private Bitmask testMask = new Bitmask(Utility.loadImage("/BitmaskTest.png"));
+	private Bitmask testMask = new Bitmask(GraphicsUtility.loadImage("/BitmaskTest.png"));
 	
 	private Delay delay = new Delay(10000);
 	
@@ -38,6 +38,8 @@ public class GameState extends State {
 		super(game);
 		String serial = "Serialized data";
 		Utility.writeObject(serial, game.dataFilePath + "/test.dat");
+		
+//		game.hideCursor();
 		
 		serial = (String)Utility.readObject(game.dataFilePath + "/test.dat");
 		
@@ -64,9 +66,8 @@ public class GameState extends State {
 				g.setColor(Color.white);
 				g.drawString("Drawable item", 300, 150);
 			}
-			
-			public void update(){}
 		};
+		
 	}
 
 	@Override
@@ -75,7 +76,10 @@ public class GameState extends State {
 		g.drawString(getGame().getCurrentFramesPerSecond() + ":" + getGame().getCurrentUpdatesPerSecond() + ":" + InputHandler.getMousePosition(), 10, 30);
 		g.setColor(Color.green);
 		g.fillRect(mouseWheelDemonstration, 10, 10, 10);
-		g.fillRect(rec2.x, rec2.y, 1, 1);
+		
+		Vector2I mousePosition = getGame().getScaledMousePosition();
+		g.fillRect(mousePosition.x, mousePosition.y, 1, 1);
+		
 		g.setColor(Color.white);
 		g.fillRect(rec1.x, rec1.y, rec1.width, rec1.height);
 		
@@ -106,7 +110,6 @@ public class GameState extends State {
 		}
 		
 		if(escape.isPressed()) getGame().stop();
-		rec2.setLocation((int)(InputHandler.getMousePosition().x / getGame().getScaleWidth()), (int)(InputHandler.getMousePosition().y / getGame().getScaleHeight()));
 		
 		if(rec1.intersects(rec2)){
 			//System.out.println(Bitmask.collision(rec1,rec2, new Bitmask(bA), new Bitmask(bB)));

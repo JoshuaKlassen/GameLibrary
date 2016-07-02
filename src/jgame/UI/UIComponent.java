@@ -1,5 +1,6 @@
 package jgame.UI;
 
+import jgame.entities.Updatable;
 import jgame.graphics.Drawable;
 import jgame.graphics.JGraphics;
 import jgame.util.Vector2I;
@@ -13,7 +14,7 @@ import jgame.util.Vector2I;
  * <br/>Allows for the creation of custom UIComponents for the game to display.
  * @author Joshua Klassen
  */
-public abstract class UIComponent implements Drawable{
+public abstract class UIComponent implements Drawable, Updatable{
 
 	//the position
 	protected Vector2I position;

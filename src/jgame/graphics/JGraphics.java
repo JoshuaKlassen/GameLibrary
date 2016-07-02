@@ -8,6 +8,9 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 
+import jgame.util.Vector2F;
+import jgame.util.Vector2I;
+
 public class JGraphics{
 
 	private Graphics graphics;
@@ -131,8 +134,24 @@ public class JGraphics{
 		graphics.drawRect(x, y, width, height);
 	}
 	
+	public void drawRect(Vector2I position, int width, int height){
+		drawRect(position.x, position.y, width, height);
+	}
+	
+	public void drawRect(Vector2F position, int width, int height){
+		drawRect((int)position.x, (int)position.y, width, height);
+	}
+	
 	public void fillRect(int x, int y, int width, int height){
 		graphics.fillRect(x, y, width, height);
+	}
+	
+	public void fillRect(Vector2I position, int width, int height){
+		fillRect(position.x, position.y, width, height);
+	}
+	
+	public void fillRect(Vector2F position, int width, int height){
+		fillRect((int)position.x, (int)position.y, width, height);
 	}
 	
 	public void clearRect(int x, int y, int width, int height) {
@@ -149,6 +168,22 @@ public class JGraphics{
 
 	public boolean drawSprite(Sprite sprite, int x, int y, int width, int height) {
 		return drawImage(sprite.getImage(), x, y, width, height);
+	}
+	
+	public boolean drawSprite(Sprite sprite, Vector2I position){
+		return drawSprite(sprite, position.x, position.y);
+	}
+	
+	public boolean drawSprite(Sprite sprite, Vector2I position, int width, int height){
+		return drawSprite(sprite, position.x, position.y, width, height);
+	}
+	
+	public boolean drawSprite(Sprite sprite, Vector2F position){
+		return drawSprite(sprite, (int)position.x, (int)position.y);
+	}
+	
+	public boolean drawSprite(Sprite sprite, Vector2F position, int width, int height){
+		return drawSprite(sprite, (int)position.x, (int)position.y, width, height);
 	}
 	
 	public boolean drawImage(BufferedImage image, int x, int y){

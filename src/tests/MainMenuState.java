@@ -2,12 +2,14 @@ package tests;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics;
+import java.util.ArrayList;
+import java.util.List;
 
 import jgame.UI.ButtonAction;
 import jgame.UI.UIButton;
 import jgame.UI.UIButtonList;
 import jgame.UI.UILabel;
+import jgame.entities.Entity;
 import jgame.game.INPUT_KEY;
 import jgame.game.InputHandler;
 import jgame.game.InputKey;
@@ -37,6 +39,8 @@ public class MainMenuState extends State {
 	
 	private int buttonListPosition = 0;
 	
+	private List<Entity> entities;
+	
 	public MainMenuState(JGameTest game) {
 		super(game);
 		
@@ -59,7 +63,6 @@ public class MainMenuState extends State {
 					g.fillRect(b.getPosition().x, b.getPosition().y, b.getWidth(), b.getHeight());
 					name.render(g);
 				}
-				public void update(){System.out.println("in my drawable");}
 			};
 			
 			int highlightSize = 5;
@@ -69,7 +72,6 @@ public class MainMenuState extends State {
 					g.fillRect(b.getPosition().x-highlightSize, b.getPosition().y-highlightSize, b.getWidth()+highlightSize*2, b.getHeight()+highlightSize*2);
 					name.render(g);
 				}
-				public void update(){System.out.println("in my drawable");}
 			};
 			
 			int pressedSize = 5;
@@ -79,7 +81,6 @@ public class MainMenuState extends State {
 					g.fillRect(b.getPosition().x+pressedSize, b.getPosition().y+pressedSize, b.getWidth()-pressedSize*2, b.getHeight()-pressedSize*2);
 					name.render(g);
 				}
-				public void update(){System.out.println("in my drawable");}
 			};
 			b.setNormalState(normal);
 			b.setHighlightedState(highlighted);
@@ -93,6 +94,8 @@ public class MainMenuState extends State {
 		UIButton startButton = menuButtons.getButtons().get(0);
 		ButtonAction singlePlayerAction = new ButtonAction(){
 			public void doAction(){
+//				entities.addAll((ParticleFactory.generateParticles(new Vector2F(50, 50), 50, 5, 200, -7f, 4f, 3f, 5f, 3, Color.RED)));
+
 				getGame().transitionState(new GameState((JGameTest)getGame()));
 			}
 		};
@@ -107,6 +110,15 @@ public class MainMenuState extends State {
 		};
 		optionsButton.setAction(optionsAction);
 		
+		UIButton trainingButton = menuButtons.getButtons().get(NUMBER_OF_BUTTONS-3);
+		ButtonAction traningAction = new ButtonAction(){
+			public void doAction(){
+				InputHandler.removeAll();
+				getGame().transitionState(new TrainingState((JGameTest)getGame()));
+			}
+		};
+		trainingButton.setAction(traningAction);
+		
 		//last button
 		UIButton exitButton = menuButtons.getButtons().get(menuButtons.getButtons().size()-1);
 		ButtonAction exitAction = new ButtonAction(){
@@ -116,24 +128,36 @@ public class MainMenuState extends State {
 		};
 		exitButton.setAction(exitAction);
 		
-		
+		entities = new ArrayList<Entity>();
 	}
 
 	@Override
 	public void render(JGraphics g) {
 		gameTitle.render(g);
 		
-		
 		menuButtons.render(g);
 		
 		g.setColor(Color.white);
 		g.drawString(buttonListPosition + "", 10, 10);
+		g.fillRect(new Vector2I(50, 50), 3, 3);
+		
+		for(int i = 0; i < entities.size(); i ++){
+			entities.get(i).render(g);
+		}
 		
 	}
 
 	@Override
 	public void update() {
 		gameTitle.update();
+		
+		for(int i = 0; i < entities.size(); i ++){
+			Entity e = entities.get(i);
+			e.update();
+			if(!e.isAlive()){
+				entities.remove(e);
+			}
+		}
 		
 		if(up.isPressed()){
 			buttonListPosition --;

@@ -4,6 +4,4 @@ public interface Drawable {
 
 	void render(JGraphics g);
 	
-	void update();
-	
 }

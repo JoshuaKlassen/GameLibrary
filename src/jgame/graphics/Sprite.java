@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 
 import jgame.entities.ICollisionArea;
 
-public class Sprite {
+public class Sprite{
 
 	private BufferedImage image;
 	
