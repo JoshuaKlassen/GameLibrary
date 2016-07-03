@@ -8,6 +8,8 @@ import jgame.game.InputHandler;
 import jgame.game.InputKey;
 import jgame.game.JGame;
 import jgame.game.State;
+import jgame.graphics.Camera;
+import jgame.graphics.IRenderable;
 import jgame.graphics.JGraphics;
 import jgame.util.Vector2;
 
@@ -20,23 +22,47 @@ public class TrainingState extends State{
 	
 	private MyMob myMob;
 	
+	private Camera camera;
+	
+	private IRenderable temp;
+	
 	public TrainingState(JGame game) {
 		super(game);
 		InputHandler.add(up, down, left, right);
 		myMob = new MyMob(new Vector2(10, 10));
+		
+		camera = new Camera(game);
+		camera.follow(myMob);
+		
+		temp = new IRenderable(){
+			public void render(JGraphics g){
+				g.setColor(Color.YELLOW);
+				g.fillRect(100, 100, 10, 10);
+			}
+		};
 	}
 
 	@Override
 	public void render(JGraphics g) {
 		g.setColor(Color.white);
-		g.drawString(getGame().getCurrentFramesPerSecond() + ":" + getGame().getCurrentUpdatesPerSecond() + ":" + InputHandler.getMousePosition(), 10, 30);
+		g.drawString(InputHandler.getMouseWheelRotation() + "", 10, 30);
+		
+		camera.startCapture(g);
 		
 		myMob.render(g);
 		
+		temp.render(g);
+		
+		camera.endCapture(g);
+		
+		g.setColor(Color.RED);
+		g.drawRect(camera.position(), 1, 1);
 	}
 
 	@Override
 	public void update() {
+		camera.update();
+		
 		if(up.isPressed()){
 			myMob.velocity().y = -1;
 		}else if(down.isPressed()){
