@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
-import jgame.entities.Entity;
+import jgame.entities.Actor;
 import jgame.entities.ParticleFactory;
 import jgame.game.INPUT_KEY;
 import jgame.game.InputHandler;
@@ -37,7 +37,7 @@ public class GameState extends State {
 	
 	private IRenderable drawItem;
 	
-	private ArrayList<Entity> entities;
+	private ArrayList<Actor> entities;
 	
 	private String serializedEntitiesPath = "/entities.dat";
 	
@@ -49,9 +49,9 @@ public class GameState extends State {
 		this.game = game;
 		if(!Utility.directoryExists(game.dataFilePath + serializedEntitiesPath)){
 			Utility.createDataFolder(game.dataFilePath + serializedEntitiesPath);
-			entities = new ArrayList<Entity>();
+			entities = new ArrayList<Actor>();
 		}else{
-			entities = (ArrayList<Entity>)Utility.readObject(game.dataFilePath + serializedEntitiesPath);
+			entities = (ArrayList<Actor>)Utility.readObject(game.dataFilePath + serializedEntitiesPath);
 		}
 		
 		game.hideCursor();
@@ -73,7 +73,11 @@ public class GameState extends State {
 		delay.start();
 		
 		drawItem = new IRenderable(){
+			private Vector2 position = new Vector2(300, 150);
 			public void render(JGraphics g){
+				render(g, position);
+			}
+			public void render(JGraphics g, Vector2 position){
 				g.setColor(Color.white);
 				g.drawString("Drawable item", 300, 150);
 			}
@@ -114,7 +118,7 @@ public class GameState extends State {
 		entities.addAll(ParticleFactory.generateParticles(InputHandler.getScaledMousePosition(), 1, 2, 1, 2, 0.5f, 1f, 1, Color.RED));
 
 		for(int i = 0; i < entities.size(); i ++){
-			Entity e = entities.get(i);
+			Actor e = entities.get(i);
 			e.update();
 			if(!e.isAlive()){
 				entities.remove(e);

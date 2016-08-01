@@ -4,7 +4,7 @@ import jgame.graphics.IRenderable;
 import jgame.util.JSerializable;
 import jgame.util.Vector2;
 
-public abstract class Entity extends JSerializable implements IRenderable, IUpdatable{
+public abstract class Actor extends JSerializable implements IRenderable, IUpdatable{
 
 	private static final long serialVersionUID = 1478579988881050203L;
 

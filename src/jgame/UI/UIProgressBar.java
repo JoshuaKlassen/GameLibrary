@@ -72,6 +72,10 @@ public class UIProgressBar extends UIComponent {
 		}
 	}
 
+	public void render(JGraphics g, Vector2 position){
+		//TODO
+	}
+	
 	/**
 	 * Returns the progress of the progressbar.
 	 *<br/>The progress value will always be within 0 and 1.

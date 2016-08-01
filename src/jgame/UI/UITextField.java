@@ -74,6 +74,10 @@ public class UITextField extends UIComponent{
 		
 	}
 	
+	public void render(JGraphics g, Vector2 position){
+		userTextLabel.render(g, position);
+	}
+	
 	public String getText(){
 		return text;
 	}

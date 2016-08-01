@@ -26,6 +26,10 @@ public class UIImage extends UIComponent{
 
 	@Override
 	public void render(JGraphics g) {
+		render(g, position);
+	}
+	
+	public void render(JGraphics g, Vector2 position){
 		if(show){
 			g.drawImage(image, position, width, height);
 		}

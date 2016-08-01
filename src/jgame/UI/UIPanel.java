@@ -121,6 +121,16 @@ public class UIPanel extends UIComponent{
 		}
 	}
 	
+	public void render(JGraphics g, Vector2 position){
+		if(show){
+			g.setColor(backgroundColor);
+			g.fillRect(position, width, height);
+			for(UIComponent component : components){
+				component.render(g);
+			}
+		}
+	}
+	
 	@Override
 	public void setPosition(Vector2 pos){
 		Vector2 originalPosition = position;

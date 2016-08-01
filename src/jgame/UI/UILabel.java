@@ -111,6 +111,7 @@ public class UILabel extends UIComponent{
 	public void render(JGraphics g) {
 		if(show){
 			
+			//TODO: clean this up
 			//if(width == 0 || height == 0){
 				FontMetrics fm = g.getFontMetrics(font);
 				Rectangle2D bounds = fm.getStringBounds(text, g.getInstance());
@@ -125,6 +126,10 @@ public class UILabel extends UIComponent{
 			g.drawString(text, (int)position.x, (int)position.y + height);
 			g.drawRect(position, width, height);
 		}
+	}
+	
+	public void render(JGraphics g, Vector2 position){
+		//TODO
 	}
 	
 	public boolean contains(Vector2 point){

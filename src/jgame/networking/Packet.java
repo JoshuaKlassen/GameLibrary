@@ -17,7 +17,6 @@ public class Packet implements Serializable{
 	private Serializable contents;
 	
 	private PacketType type;
-
 	
 	public Packet(PacketType type, Serializable contents){
 		this.type = type;
@@ -47,5 +46,4 @@ public class Packet implements Serializable{
 	public String toString(){
 		return "Type: " + type.name() + " Contents: " + contents;
 	}
-	
 }

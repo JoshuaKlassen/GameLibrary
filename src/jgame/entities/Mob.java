@@ -1,6 +1,6 @@
 package jgame.entities;
 
-public abstract class Mob extends Entity{
+public abstract class Mob extends Actor{
 
 	/**
 	 * 

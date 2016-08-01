@@ -97,5 +97,4 @@ public class ConnectedClient {
 	void isAttemptingConnection(boolean attempting) { attemptingConnection = attempting; }
 	
 	public boolean isConnected() { return connected; }
-	
 }

@@ -3,11 +3,11 @@ package jgame.entities;
 import java.awt.Color;
 
 import jgame.graphics.Animation;
+import jgame.graphics.IMesh;
 import jgame.graphics.JGraphics;
-import jgame.graphics.Sprite;
 import jgame.util.Vector2;
 
-public class Particle extends Entity{
+public class Particle extends Actor{
 	
 	/**
 	 * 
@@ -19,9 +19,7 @@ public class Particle extends Entity{
 	
 	private Color color;
 	
-	private transient Sprite sprite;
-	
-	private Animation animation;
+	private transient IMesh mesh;
 	
 	public Particle(Vector2 position, float lifespan, Vector2 velocity, Color color, int size){
 		this.lifespan = lifespan;
@@ -31,18 +29,11 @@ public class Particle extends Entity{
 		this.size = size;
 	}
 	
-	public Particle(float lifespan, Vector2 position, Vector2 velocity, Sprite sprite){
+	public Particle(float lifespan, Vector2 position, Vector2 velocity, IMesh mesh){
 		this.lifespan = lifespan;
 		this.position = position;
 		this.velocity = velocity;
-		this.sprite = sprite;
-	}
-	
-	public Particle(float lifespan, Vector2 position, Vector2 velocity, Animation animation){
-		this.lifespan = lifespan;
-		this.position = position;
-		this.velocity = velocity;
-		this.animation = animation;
+		this.mesh = mesh;
 	}
 	
 	@Override
@@ -50,26 +41,26 @@ public class Particle extends Entity{
 		if(isAlive()){
 			position = Vector2.add(position, velocity);
 			lifespan -= 0.1f;
-			if(animation != null){
-				animation.update();
+			if(mesh != null){
+				if(mesh instanceof IUpdatable){
+					((IUpdatable)mesh).update();
+				}
 			}
 		}
 	}
 
 	@Override
-	public void render(JGraphics g) {
+	public void render(JGraphics g){
 		if(isAlive()){
-			if(sprite != null){
-				g.drawSprite(sprite, position);
-			}else if(animation != null){
-				g.drawSprite(animation.getCurrentFrame(), position);
+			if(mesh != null){
+				mesh.render(g, position);
 			}else{
 				g.setColor(color);
 				g.fillRect(position, size, size);
 			}
 		}
 	}
-
+	
 	@Override
 	protected void init() {
 		

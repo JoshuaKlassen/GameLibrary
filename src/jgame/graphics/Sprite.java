@@ -3,8 +3,9 @@ package jgame.graphics;
 import java.awt.image.BufferedImage;
 
 import jgame.entities.ICollisionArea;
+import jgame.util.Vector2;
 
-public class Sprite{
+public class Sprite implements IMesh{
 
 	private BufferedImage image;
 	
@@ -16,6 +17,9 @@ public class Sprite{
 		this.image = image;
 	}
 	
+	public void render(JGraphics g, Vector2 position){
+		g.drawImage(image, position);
+	}
 
 	public void setCollisionArea(ICollisionArea area) { collisionArea = area; }
 	

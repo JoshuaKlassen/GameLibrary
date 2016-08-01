@@ -1,7 +1,9 @@
 package jgame.util;
 
 public final class Time {
+	
 	private static long currentTime;
+	
 	private static long lastTime;
 	
 	public static long getTime(){

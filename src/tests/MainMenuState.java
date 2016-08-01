@@ -9,7 +9,7 @@ import jgame.UI.ButtonAction;
 import jgame.UI.UIButton;
 import jgame.UI.UIButtonList;
 import jgame.UI.UILabel;
-import jgame.entities.Entity;
+import jgame.entities.Actor;
 import jgame.entities.ParticleFactory;
 import jgame.game.INPUT_KEY;
 import jgame.game.InputHandler;
@@ -40,7 +40,7 @@ public class MainMenuState extends State {
 	
 	private int buttonListPosition = 0;
 	
-	private List<Entity> entities;
+	private List<Actor> entities;
 	
 	public MainMenuState(JGameTest game) {
 		super(game);
@@ -131,7 +131,7 @@ public class MainMenuState extends State {
 		};
 		exitButton.setAction(exitAction);
 		
-		entities = new ArrayList<Entity>();
+		entities = new ArrayList<Actor>();
 	}
 
 	@Override
@@ -158,7 +158,7 @@ public class MainMenuState extends State {
 		entities.addAll(ParticleFactory.generateParticles(InputHandler.getScaledMousePosition(), 1, 2, 1, 2, 0.5f, 1f, 1, Color.RED));
 
 		for(int i = 0; i < entities.size(); i ++){
-			Entity e = entities.get(i);
+			Actor e = entities.get(i);
 			e.update();
 			if(!e.isAlive()){
 				entities.remove(e);

@@ -1,14 +1,17 @@
 package jgame.graphics;
 
+import jgame.entities.IUpdatable;
+import jgame.util.Vector2;
+
 /**
  * Animation class
  * @author Josh
  */
 
-public class Animation {
+public class Animation implements IMesh, IUpdatable{
 	
 	//an array of all the frames in the animation
-	private Sprite[] frames;
+	private IMesh[] frames;
 	
 	//the speed at which each frame animates
 	private int speed;
@@ -20,12 +23,12 @@ public class Animation {
 	private int ticksPassed = 0;
 
 	//if the animation has stopped
-	private boolean stopped = false;
+	private boolean running = false;
 	
 	//if the animation will repeat
 	private boolean repeat;
 	
-	public Animation(Sprite[] frames, int speed, boolean repeat){
+	public Animation(IMesh[] frames, int speed, boolean repeat){
 		this.frames = frames;
 		this.speed = speed;
 		this.repeat = repeat;
@@ -33,9 +36,13 @@ public class Animation {
 		if(speed < 0) throw new IndexOutOfBoundsException("Animation speed cannot be less than 0 (speed=" + speed + ")");
 	}
 	
+	@Override
+	public void render(JGraphics g, Vector2 position) {
+		frames[currentFrame].render(g, position);
+	}
 	
 	public void update(){
-		if(!stopped){
+		if(running){
 			ticksPassed ++;
 			if(ticksPassed >= speed){
 				currentFrame++;
@@ -54,14 +61,14 @@ public class Animation {
 	}
 	
 	public void start(){
-		stopped = false;
+		running = true;
 	}
 	
 	public void stop(){
-		stopped = true;
+		running = false;
 	}
 	
-	public Sprite getCurrentFrame(){
+	public IMesh getCurrentFrame(){
 		if(frames == null) return null;
 		if(currentFrame > getNumberOfFrames()) return null;
 		return frames[currentFrame];
@@ -73,17 +80,21 @@ public class Animation {
 	
 	public boolean repeat(){ return repeat; }
 	
-	public Sprite[] getFrames(){ return frames; }
+	public IMesh[] getFrames(){ return frames; }
 	
-	public Sprite getFrame(int frame){
+	public IMesh getFrame(int frame){
 		if(frame < 0 || frame > frames.length) 
 			throw new IndexOutOfBoundsException("Cannot get a frame that is less than 0 or greater than the size of the frame array(frame=" + frame + ")");
 		return frames[frame];
 	}
 	
+	public int getIndex() { return currentFrame; }
+	
 	public int getSpeed(){ return speed; }
 	
 	public void setSpeed(int speed){ this.speed = speed; }
+	
+	public boolean isRunning() { return running; }
 	
 	public static Sprite[] generateRotationFrames(Sprite frame){
 		Sprite[] sprites = new Sprite[360];
@@ -94,5 +105,5 @@ public class Animation {
 	public String toString(){
 		return "Animation (currentSprite= " + getCurrentFrame() + ", currentFrame=" + currentFrame + ", numberOfFrames=" + getNumberOfFrames() + ", speed=" + speed+  ", repeat=" + repeat + ")";
 	}
-	
+
 }

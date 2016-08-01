@@ -12,7 +12,6 @@ public class UIButtonList extends UIComponent{
 	
 	public UIButtonList(Vector2 position) {
 		super(position);
-		// TODO Auto-generated constructor stub
 	}
 	
 	public UIButtonList(Vector2 position, int width, int height) {
@@ -49,5 +48,4 @@ public class UIButtonList extends UIComponent{
 			button.render(g);
 		}
 	}
-
 }

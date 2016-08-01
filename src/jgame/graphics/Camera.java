@@ -2,14 +2,14 @@ package jgame.graphics;
 
 import java.awt.Graphics2D;
 
-import jgame.entities.Entity;
+import jgame.entities.Actor;
 import jgame.entities.IUpdatable;
 import jgame.game.JGame;
 import jgame.util.Vector2;
 
 public class Camera implements IUpdatable{
 
-	private Entity target;
+	private Actor target;
 	
 	private boolean isFollowing = true;
 	
@@ -46,7 +46,7 @@ public class Camera implements IUpdatable{
 		g2d.translate(position.x, position.y);
 	}
 	
-	public void follow(Entity e) { target = e; }
+	public void follow(Actor e) { target = e; }
 	
 	public void startFollowing() { isFollowing = true; }
 	

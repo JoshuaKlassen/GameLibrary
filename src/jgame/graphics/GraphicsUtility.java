@@ -10,8 +10,7 @@ import jgame.util.Utility;
 public final class GraphicsUtility {
 	public static BufferedImage loadImage(String filePath) {
 		try {
-			return ImageIO.read(Utility.class
-					.getResourceAsStream(filePath));
+			return ImageIO.read(Utility.class.getResourceAsStream(filePath));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

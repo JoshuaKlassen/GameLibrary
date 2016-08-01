@@ -2,7 +2,7 @@ package jgame.entities;
 
 import jgame.graphics.JGraphics;
 
-public class Item extends Entity{
+public class Item extends Actor{
 
 	private static final long serialVersionUID = 7150235249287185499L;
 
@@ -19,6 +19,7 @@ public class Item extends Entity{
 
 	@Override
 	public void render(JGraphics g) {
+		render(g);
 	}
 
 	@Override

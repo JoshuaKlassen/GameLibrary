@@ -64,5 +64,4 @@ public class ConnectionLog {
 	}
 	
 	public void clear(){ log.clear(); }
-	
 }

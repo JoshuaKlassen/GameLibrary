@@ -50,5 +50,4 @@ class LogItem {
 	public int getMillis() { return millis; }
 
 	public void setMillis(int millis) { this.millis = millis; }
-	
 }

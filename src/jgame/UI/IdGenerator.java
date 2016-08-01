@@ -29,5 +29,4 @@ public final class IdGenerator {
 	}
 	
 	public static void addId(int id){ Ids.add(id); }
-	
 }

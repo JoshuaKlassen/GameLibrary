@@ -100,8 +100,9 @@ public class UIButton extends UIComponent{
 
 	@Override
 	public void render(JGraphics g) {
-		if(currentState != null)
+		if(currentState != null){
 			currentState.render(g);
+		}
 	}
 	
 	public boolean contains(Vector2 pos){
