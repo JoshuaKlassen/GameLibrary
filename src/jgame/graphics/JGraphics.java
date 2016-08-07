@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Polygon;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
@@ -149,6 +150,31 @@ public class JGraphics{
 		graphics.clearRect(x, y, width, height);
 	}
 
+	public void drawCircle(int x, int y, int width, int height){
+		graphics.drawOval(x, y, width, height);
+	}
+	
+	public void fillCircle(int x, int y, int width, int height){
+		graphics.fillOval(x, y, width, height);
+	}
+	
+	//TODO radius vs diameter
+	public void drawCircle(Vector2 position, int width, int height){
+		graphics.drawOval((int)position.x, (int)position.y, width, height);
+	}
+	
+	public void fillCircle(Vector2 position, int width, int height){
+		graphics.fillOval((int)position.x, (int)position.y, width, height);
+	}
+	
+	public void drawPolygon(Polygon polygon){
+		graphics.drawPolygon(polygon);
+	}
+	
+	public void fillPolygon(Polygon polygon){
+		graphics.fillPolygon(polygon);
+	}
+	
 	public void drawString(String str, int x, int y) {
 		graphics.drawString(str, x, y);
 	}

@@ -1,15 +1,25 @@
 package tests;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsEnvironment;
+import java.awt.geom.Area;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import jgame.entities.Mob;
+import jgame.entities.Particle;
+import jgame.entities.ParticleFactory;
 import jgame.environment.Tile;
 import jgame.game.INPUT_KEY;
 import jgame.game.InputHandler;
 import jgame.game.InputKey;
 import jgame.game.JGame;
 import jgame.game.State;
+import jgame.geometry.JCircle;
+import jgame.geometry.JPolygon;
+import jgame.geometry.JShape;
 import jgame.graphics.Animation;
 import jgame.graphics.Camera;
 import jgame.graphics.GraphicsUtility;
@@ -25,6 +35,8 @@ public class TrainingState extends State {
 	private InputKey down = new InputKey(INPUT_KEY.DOWN);
 	private InputKey left = new InputKey(INPUT_KEY.LEFT);
 	private InputKey right = new InputKey(INPUT_KEY.RIGHT);
+	
+	private InputKey escape = new InputKey(INPUT_KEY.VK_ESCAPE);
 
 	private MyMob myMob;
 
@@ -34,21 +46,30 @@ public class TrainingState extends State {
 
 	private Tile[][] tileMap;
 
-	Sprite s;
+	private Sprite s;
 	
 	private Animation animation;
 	
+	private JCircle jcircle;
+	
+	private ArrayList<Particle> particles;
+	
+	private JPolygon jpolygon;
+	
 	public TrainingState(JGame game) {
 		super(game);
-		InputHandler.add(up, down, left, right);
+		InputHandler.add(up, down, left, right, escape);
 		myMob = new MyMob(new Vector2(10, 10));
+		jpolygon = new JPolygon(myMob.position());
 
+		particles = new ArrayList<Particle>();
+		
 		camera = new Camera(game);
 		camera.follow(myMob);
+		
+		tileMap = new Tile[10][10];
 
-		tileMap = new Tile[100][100];
-
-		BufferedImage tileImage = GraphicsUtility.loadImage("/GrassTile.png");
+		BufferedImage tileImage = toCompatibleImage(GraphicsUtility.loadImage("/GrassTile.png"));
 		s = new Sprite(tileImage);
 		
 		IMesh mesh = new IMesh(){
@@ -58,7 +79,7 @@ public class TrainingState extends State {
 			}
 		};
 		
-		animation = new Animation(new IMesh[]{new Sprite(tileImage), mesh}, 100, true);
+		animation = new Animation(new IMesh[]{new Sprite(tileImage)}, 100, true);
 		
 		for (int i = 0; i < tileMap.length; i++) {
 			for (int j = 0; j < tileMap[0].length; j++) {
@@ -75,12 +96,21 @@ public class TrainingState extends State {
 				g.fillRect(100, 100, 10, 10);
 			}
 		};
+		jcircle = new JCircle(new Vector2(1, 1), 20);
+		jcircle.setInnerColor(new Color(1, 0f, 0f, 0.5f));
+		
+		jpolygon.addPoint(new Vector2(0, 0));
+		jpolygon.addPoint(new Vector2(5, 20));
+		jpolygon.addPoint(new Vector2(0, 30));
+		jpolygon.addPoint(new Vector2(5, 40));
+		
+		jpolygon.setOutlineColor(Color.YELLOW);
+		jpolygon.setInnerColor(new Color(1, 1, 0, 0.7f));
 	}
 
 	@Override
 	public void render(JGraphics g) {
-		g.setColor(Color.white);
-		g.drawString(animation.getIndex() + "-" + animation.isRunning(), 10, 30);
+		
 
 		camera.startCapture(g);
 
@@ -93,13 +123,41 @@ public class TrainingState extends State {
 		myMob.render(g);
 
 		temp.render(g);
+		
+		jcircle.render(g);
+		
+		jpolygon.render(g);
 
 		camera.endCapture(g);
+		
+		for(int i = 0; i < particles.size(); i ++){
+			particles.get(i).render(g);
+		}
+		
+		g.setColor(Color.white);
+		g.drawString(getGame().getCurrentFramesPerSecond() + ":" + testIntersection(jcircle, jpolygon), 10, 30);
 
+	}
+	
+	private boolean testIntersection(JShape a, JShape b){
+		Area areaA = new Area(a);
+		areaA.intersect(new Area(b));
+		return !areaA.isEmpty();
+		
 	}
 
 	@Override
 	public void update() {
+		if(escape.isPressed()){
+			System.exit(0);
+		}
+		
+		particles.addAll(ParticleFactory.generateParticles(InputHandler.getScaledMousePosition(), 1, 20, 1, 2, 0.5f, 1f, 1, Color.RED));
+		
+		for(int i = 0; i < particles.size(); i ++){
+			particles.get(i).update();
+		}
+		
 		camera.update();
 
 		animation.update();
@@ -125,8 +183,39 @@ public class TrainingState extends State {
 		} else {
 			myMob.velocity().x = 0;
 		}
+		
+		jpolygon.move((int)myMob.velocity().x, (int)myMob.velocity().y);
 
 		myMob.update();
+	}
+	
+	private BufferedImage toCompatibleImage(BufferedImage image)
+	{
+		// obtain the current system graphical settings
+		GraphicsConfiguration gfx_config = GraphicsEnvironment.
+			getLocalGraphicsEnvironment().getDefaultScreenDevice().
+			getDefaultConfiguration();
+
+		/*
+		 * if image is already compatible and optimized for current system 
+		 * settings, simply return it
+		 */
+		if (image.getColorModel().equals(gfx_config.getColorModel()))
+			return image;
+
+		// image is not optimized, so create a new image that is
+		BufferedImage new_image = gfx_config.createCompatibleImage(
+				image.getWidth(), image.getHeight(), image.getTransparency());
+
+		// get the graphics context of the new image to draw the old image on
+		Graphics2D g2d = (Graphics2D) new_image.getGraphics();
+
+		// actually draw the image and dispose of context no longer needed
+		g2d.drawImage(image, 0, 0, null);
+		g2d.dispose();
+		
+		// return the new optimized image
+		return new_image; 
 	}
 
 }

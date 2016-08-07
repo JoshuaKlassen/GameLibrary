@@ -1,6 +1,7 @@
 package tests;
 
 import jgame.game.JGame;
+import jgame.game.State;
 import jgame.util.SettingsList;
 import jgame.util.Utility;
 
@@ -8,7 +9,8 @@ public class JGameTest extends JGame {
 
 	private static final long serialVersionUID = 1L;
 
-	private MainMenuState mainMenuState;
+	private State mainMenuState;
+	private State trainingState;
 	
 	private String TITLE = "TestGame";
 	public String dataFilePath = "";
@@ -20,9 +22,13 @@ public class JGameTest extends JGame {
 	public JGameTest(int screenWidth, int screenHeight) {
 		super(screenWidth, screenHeight);
 		super.setJFrame(getDefaultJFrame());
-		super.toggleFullScreen();
+//		super.toggleFullScreen();
+		
+		System.setProperty("sun.java2d.opengl", "True");
+		System.setProperty("sun.java2d.trace", "log");
 		
 		mainMenuState = new MainMenuState(this);
+		trainingState = new TrainingState(this);
 		this.transitionState(mainMenuState);
 		
 		dataFilePath = Utility.createDataFolder(TITLE);
@@ -52,14 +58,14 @@ public class JGameTest extends JGame {
 	}
 	
 	public static void main(String[] args){
+		System.setProperty("sun.java2d.opengl", "True");
+		System.setProperty("sun.java2d.nodraw", "True");
+		System.setProperty("sun.java2d.d3d", "False");
+		
 		long now = System.currentTimeMillis();
 		JGameTest test = new JGameTest(400, 200);
 		test.start();
 		
-		while(!test.isFullScreen() ||System.currentTimeMillis() - now < 2000){
-			
-		}
-		//test.stop();
 	}
 
 }
