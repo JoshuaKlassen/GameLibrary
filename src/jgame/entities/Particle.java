@@ -22,6 +22,7 @@ public class Particle extends Actor{
 	private transient IMesh mesh;
 	
 	public Particle(Vector2 position, float lifespan, Vector2 velocity, Color color, int size){
+		super(null);
 		this.lifespan = lifespan;
 		this.position = position;
 		this.velocity = velocity;
@@ -30,6 +31,7 @@ public class Particle extends Actor{
 	}
 	
 	public Particle(float lifespan, Vector2 position, Vector2 velocity, IMesh mesh){
+		super(null);
 		this.lifespan = lifespan;
 		this.position = position;
 		this.velocity = velocity;

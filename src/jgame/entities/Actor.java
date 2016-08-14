@@ -14,6 +14,12 @@ public abstract class Actor extends JSerializable implements IRenderable, IUpdat
 	
 	public abstract boolean isAlive();
 	
+	private ActorManager actorManager;
+	
+	public Actor(ActorManager actorManager){
+		this.actorManager = actorManager;
+	}
+	
 	public Vector2 position() { return position; }
 	
 	public void setPosition(Vector2 pos) { position = pos; }
@@ -22,4 +28,11 @@ public abstract class Actor extends JSerializable implements IRenderable, IUpdat
 	
 	public void setVelocity(Vector2 vel) { velocity = vel; }
 	
+	public void spawn(){
+		actorManager.spawn(this);
+	}
+	
+	public void despawn(){
+		actorManager.despawn(this);
+	}
 }

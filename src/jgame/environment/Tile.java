@@ -1,6 +1,7 @@
 package jgame.environment;
 
 import jgame.entities.IUpdatable;
+import jgame.graphics.DefaultMesh;
 import jgame.graphics.IMesh;
 import jgame.graphics.IRenderable;
 import jgame.graphics.JGraphics;
@@ -18,14 +19,17 @@ public class Tile extends JSerializable implements IRenderable, IUpdatable{
 	
 	private Vector2 position;
 
-	private transient IMesh mesh;
+	private transient IMesh mesh = new DefaultMesh();
 	
 	public static int TILE_SIZE = 16;
 	
 	public Tile(int ID, Vector2 position, IMesh mesh){
 		this.Id = ID;
 		this.position = position;
-		this.mesh = mesh;
+		if(mesh != null){
+			this.mesh = mesh;
+		}
+		
 	}
 	
 	public void update(){

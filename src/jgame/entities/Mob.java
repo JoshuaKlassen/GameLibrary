@@ -10,6 +10,10 @@ public abstract class Mob extends Actor{
 	private int maxHealth;
 	private int health;
 	
+	public Mob(ActorManager actorManager){
+		super(actorManager);
+	}
+	
 	@Override
 	public boolean isAlive() { return health > 0; }
 

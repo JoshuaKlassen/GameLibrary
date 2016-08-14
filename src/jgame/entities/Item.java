@@ -8,7 +8,8 @@ public class Item extends Actor{
 
 	private String name = "";
 	
-	public Item(String name){
+	public Item(ActorManager actorManager, String name){
+		super(actorManager);
 		this.name = name;
 	}
 	
