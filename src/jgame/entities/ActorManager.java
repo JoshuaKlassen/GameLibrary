@@ -1,5 +1,6 @@
 package jgame.entities;
 
+import java.awt.Shape;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -10,7 +11,7 @@ public class ActorManager {
 	
 	private ArrayList<Actor> actors;
 	
-	private boolean sortActors = true;
+	private boolean sortActorsOnY = true;
 	
 	private Comparator<Actor> comparator;
 	
@@ -19,8 +20,8 @@ public class ActorManager {
 		comparator = new Comparator<Actor>(){
 			@Override
 			public int compare(Actor a, Actor b){
-				return Float.compare(a.position.y, b.position.y);
-				
+				int zCompare = Integer.compare(a.getZ(), b.getZ());
+				return zCompare != 0 ? zCompare : Float.compare(a.position().y, b.position().y);
 			}
 		};
 	}
@@ -34,7 +35,7 @@ public class ActorManager {
 	}
 	
 	public void update(){
-		if(sortActors){
+		if(sortActorsOnY){
 			Collections.sort(actors, comparator);
 		}
 		
@@ -43,13 +44,25 @@ public class ActorManager {
 		}
 	}
 	
-	public void render(JGraphics g){
+	public void render(JGraphics g, Shape bounds, int z){
 		for(int i = 0; i < actors.size(); i ++){
-			actors.get(i).render(g);
+			Actor actor = actors.get(i);
+			if(actor.getZ() == z && bounds.contains(actor.position().x, actor.position().y)){
+				actor.render(g);
+			}
 		}
 	}
 	
-	public void enableActorSort() { sortActors = true; }
+	public void render(JGraphics g, int z){
+		for(int i = 0; i < actors.size(); i ++){
+			Actor actor = actors.get(i);
+			if(actor.getZ() == z){
+				actor.render(g);
+			}
+		}
+	}
 	
-	public void disableActorSort() { sortActors = false; }
+	public void enableActorSortOnY() { sortActorsOnY = true; }
+	
+	public void disableActorSortOnY() { sortActorsOnY = false; }
 }

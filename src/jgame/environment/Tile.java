@@ -3,12 +3,10 @@ package jgame.environment;
 import jgame.entities.IUpdatable;
 import jgame.graphics.DefaultMesh;
 import jgame.graphics.IMesh;
-import jgame.graphics.IRenderable;
 import jgame.graphics.JGraphics;
-import jgame.util.JSerializable;
 import jgame.util.Vector2;
 
-public class Tile extends JSerializable implements IRenderable, IUpdatable{
+public class Tile extends EnvironmentObject{
 
 	/**
 	 * 
@@ -23,7 +21,8 @@ public class Tile extends JSerializable implements IRenderable, IUpdatable{
 	
 	public static int TILE_SIZE = 16;
 	
-	public Tile(int ID, Vector2 position, IMesh mesh){
+	public Tile(EnvironmentManager environmentManager, int ID, Vector2 position, IMesh mesh){
+		super(environmentManager);
 		this.Id = ID;
 		this.position = position;
 		if(mesh != null){

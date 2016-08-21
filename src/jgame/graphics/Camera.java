@@ -1,9 +1,11 @@
 package jgame.graphics;
 
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 
 import jgame.entities.Actor;
 import jgame.entities.IUpdatable;
+import jgame.environment.Tile;
 import jgame.game.JGame;
 import jgame.util.Vector2;
 
@@ -21,12 +23,19 @@ public class Camera implements IUpdatable{
 	
 	private float zoom = 1;
 	
+	private Rectangle bounds;
+	
 	public Camera(JGame game){
 		gameInstance = game;
 		position = new Vector2();
+		
+		bounds = new Rectangle();
+		updateBounds();
 	}
 	
 	public void update(){
+		updateBounds();
+		
 		if(!locked && isFollowing && target != null){
 			Vector2 pos = target.position();
 			position.x = (pos.x - (gameInstance.getWidth() / 2) / gameInstance.getScaleWidth() / zoom);
@@ -62,4 +71,15 @@ public class Camera implements IUpdatable{
 	}
 	
 	public float getZoom() { return zoom; }
+	
+	private void updateBounds(){
+		bounds.x = (int)position.x - Tile.TILE_SIZE;
+		bounds.y = (int)position.y - Tile.TILE_SIZE;
+		bounds.width = (int)(gameInstance.getWidth() / gameInstance.getScaleWidth()) + (Tile.TILE_SIZE );
+		bounds.height = (int)(gameInstance.getHeight() / gameInstance.getScaleHeight()) + (Tile.TILE_SIZE);
+	}
+	
+	public Rectangle getBounds(){
+		return bounds;
+	}
 }
