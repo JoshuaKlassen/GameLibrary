@@ -1,5 +1,7 @@
 package jgame.graphics;
 
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -28,6 +30,31 @@ public final class GraphicsUtility {
 				} else result[i][j] = 0;
 			}
 		}
+		return result;
+	}
+	
+	public static BufferedImage scaleImage(BufferedImage image, float scaleX, float scaleY){
+		BufferedImage after = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		AffineTransform affineTransform = new AffineTransform();
+		affineTransform.scale(scaleX, scaleY);
+		AffineTransformOp scaleOp = new AffineTransformOp(affineTransform, AffineTransformOp.TYPE_BILINEAR);
+		return scaleOp.filter(image, after);
+	}
+	
+	public static BufferedImage flipImage(BufferedImage image){
+		AffineTransform affineTransform = AffineTransform.getScaleInstance(-1, 1);
+		affineTransform.translate(-image.getWidth(null), 0);
+		AffineTransformOp flipOp = new AffineTransformOp(affineTransform, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+		return flipOp.filter(image, null);
+	}
+	
+	public static BufferedImage[] ripColumnFromImage(BufferedImage image, int numberOfSprites, int x, int y, int width, int height){
+		BufferedImage[] result = new BufferedImage[numberOfSprites];
+		
+		for(int i = 0; i < numberOfSprites; i ++){
+			result[i] = image.getSubimage(x, y + (height * i) + i, width, height);
+		}
+		
 		return result;
 	}
 }

@@ -127,12 +127,14 @@ public class Vector2 implements Serializable{
 	 * Normalizes the vector
 	 * <br/>i.e. transforms the vector to a vector with a length of 0.
 	 */
-	public void normalize(){
+	public Vector2 normalize(){
+		Vector2 result = new Vector2(x, y);
 		if(length() != 0){
 			float s = 1.0f / (float) length();
-			x *= s;
-			y *= s;
+			result.x *= s;
+			result.y *= s;
 		}
+		return result;
 	}
 	
 	/**
