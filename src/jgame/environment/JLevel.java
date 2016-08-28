@@ -1,6 +1,5 @@
 package jgame.environment;
 
-import java.awt.Color;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 

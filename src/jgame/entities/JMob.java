@@ -1,6 +1,6 @@
 package jgame.entities;
 
-public abstract class Mob extends Actor{
+public abstract class JMob extends Actor{
 
 	/**
 	 * 
@@ -10,7 +10,7 @@ public abstract class Mob extends Actor{
 	private int maxHealth;
 	private int health;
 	
-	public Mob(ActorManager actorManager){
+	public JMob(ActorManager actorManager){
 		super(actorManager);
 	}
 	

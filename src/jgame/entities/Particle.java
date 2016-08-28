@@ -2,7 +2,6 @@ package jgame.entities;
 
 import java.awt.Color;
 
-import jgame.graphics.Animation;
 import jgame.graphics.IMesh;
 import jgame.graphics.JGraphics;
 import jgame.util.Vector2;
