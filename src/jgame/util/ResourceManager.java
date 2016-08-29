@@ -1,12 +1,12 @@
 package jgame.util;
 
-import java.util.Dictionary;
 import java.util.HashMap;
+import java.util.Map;
 
 public final class ResourceManager {
 
-	private static Dictionary<String, IResourceLoader> resourceLoaders;
-	private static HashMap<String, Object> resourceCache = new HashMap<String, Object>();
+	private static Map<String, IResourceLoader> resourceLoaders = new HashMap<String, IResourceLoader>();
+	private static Map<String, Object> resourceCache = new HashMap<String, Object>();
 	
 	public static void registerLoader(String type, IResourceLoader resourceLoader){
 		resourceLoaders.put(type, resourceLoader);

@@ -1,6 +1,7 @@
 package jgame.graphics;
 
 import jgame.entities.IUpdatable;
+import jgame.util.JSerializable;
 import jgame.util.Vector2;
 
 /**
@@ -8,19 +9,24 @@ import jgame.util.Vector2;
  * @author Josh
  */
 
-public class Animation implements IMesh, IUpdatable{
+public class Animation extends JSerializable implements IMesh, IUpdatable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5050086301200235927L;
+
 	//an array of all the frames in the animation
-	private IMesh[] frames;
+	private Sprite[] frames;
 	
 	//the speed at which each frame animates
 	private int speed;
 	
 	//the currentFrame position in the array of frames in the animation
-	private int currentFrame = 0;
+	private transient int currentFrame = 0;
 	
 	//how many ticks have passed since the last change in the currentFrame of the animation
-	private int ticksPassed = 0;
+	private transient int ticksPassed = 0;
 
 	//if the animation has stopped
 	private boolean running = false;
@@ -28,7 +34,7 @@ public class Animation implements IMesh, IUpdatable{
 	//if the animation will repeat
 	private boolean repeat;
 	
-	public Animation(IMesh[] frames, int speed, boolean repeat){
+	public Animation(Sprite[] frames, int speed, boolean repeat){
 		this.frames = frames;
 		this.speed = speed;
 		this.repeat = repeat;
@@ -106,4 +112,8 @@ public class Animation implements IMesh, IUpdatable{
 		return "Animation (currentSprite= " + getCurrentFrame() + ", currentFrame=" + currentFrame + ", numberOfFrames=" + getNumberOfFrames() + ", speed=" + speed+  ", repeat=" + repeat + ")";
 	}
 
+	@Override
+	protected void init() {
+		
+	}
 }
